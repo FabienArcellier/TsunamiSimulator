@@ -1,0 +1,14 @@
+Calcul de l'angle formé par 1 vecteurs 2D (x1, y1) et (x2, y2) par rapport au repere 0 (x0, y0)
+
+x_01 = (x1 - x0)
+y_01 = (y1 - y0)
+longueur_01 = sqrt[x_01² + y_01)²]
+x_02 = (x2 - x0)
+y_02 = (y2 - y0)
+longueur_02 = sqrt[x_02² + y_02²]
+
+cos A = (x_01 * x_02 + y_01 * y02) / (longueur01 * longueur_02)
+//A = arccos(cos A)
+
+Calcul du signe de l'angle ?
+  Si longueur_01 < longueur_02y_02

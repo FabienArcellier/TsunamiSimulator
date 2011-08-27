@@ -1,0 +1,29 @@
+Nous avons vu qu'un tsunami est une propagation d'ondes dans l'océan suite à un phénomène géologique
+Pour modéliser un tsunami sur ordinateur, il faut calculer dans un premier temps la source, puis la propagation des vagues.
+
+Pour les séismes, nous savons depuis les années 1970 calculer le déplacement de la surface du sol à partir d'une
+dizaine de paramètres évalués par les sismologues, dont la surface de la zone de rupture et les valeurs du glissement
+le long de celle-ci.
+
+La propagation des vagues du tsunami est relativement simple à traiter au large. Pour l'initier, on considère
+que la déformation du fond de l'océan agit comme un piston qui soulève ou abaisse le niveau d'eau jusqu'à la surface de l'océan, car l'eau
+ne peut se comprimer: elle transmet intégralement les mouvements.
+
+Puis il faut simplifier les équations décrivant la forme des vagues au cours du temps (équations classiques dites de Navier-Strokes, établies depuis
+le début du XIXème siècle).
+L'ordinateur est alors capable de calculer en tout point, les valeurs du niveau de la mer et de la vitesse. Ainsi de suite jusqu'à ce que le tsunami est traversé tout un
+océan.
+
+Une approche possible pour résoudre ces équations est de découper l'océan en boites élémentaires. Chaque boite représente une colonne d'eau entre la surface
+et le fond de la mer.
+Pour chacunes d'entres elles, les équations de Naviers Stokes sont résolues à chaque instant et traduisent le fait que l'équilibre de la boite doit
+être respecté et que son soulèvement ou abaissement résulte des pressions exercées par les boites voisines.
+
+Chaque boite est en outre caractérisée par la hauteur d'eau de la colonne, reliée à la vitesse du tsunami qui conditionne la vitesse de propagation de
+l'ondulation.
+
+Etablir la valeur de l'épaisseur de l'eau pour toutes les boites necessite une connaissance précise de la cartographie des fonds marins, ce qui est rendu
+possible par les nombres campagnes océanographiques ménés depuis les années 50 et les satellites depuis les années 70.
+
+Comme les ondes sont très longues au large, elles peuvent être décrite par des boites assez larges (plusieurs km). Lorsque les ondes raccourcissent,
+les boites doivent être de plus petites taille, jusqu'à des dimensions de l'ordre de 20m environ.
