@@ -1,4 +1,6 @@
+#include "debug.h"
 #include "test.h"
+#include "wave_signal.h"
 #include "ground.h"
 #include "ground_area.h"
 
@@ -45,7 +47,13 @@ void ground_area_get_ground_tests()
   
   ground = ground_area_get_ground (ground_area, 9, 9);
   TEST (&(ground_area -> area[99]) == ground);
+	TEST (ground_get_position_X (ground) == 9);
+	DEBUG_IF (ground_get_position_X (ground) != 9, "%d", ground_get_position_X (ground));
+	TEST (ground_get_position_Y (ground) == 9);
+	DEBUG_IF (ground_get_position_Y (ground) != 9, "%d", ground_get_position_Y (ground));
   ground = ground_area_get_ground (ground_area, 0, 0);
   TEST (&(ground_area -> area[0]) == ground);
+	TEST (ground_get_position_X (ground) == 0);
+	TEST (ground_get_position_Y (ground) == 0);
   
 }

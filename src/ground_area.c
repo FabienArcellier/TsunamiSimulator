@@ -1,6 +1,7 @@
 #include <assert.h>
 #include <stdlib.h>
 #include <string.h>
+#include "wave_signal.h"
 #include "ground.h"
 #include "ground_area.h"
 
@@ -36,12 +37,42 @@ void ground_area_create (PtrGroundArea *ground_area , int width, int length)
   }
   
   memset ((*ground_area) -> area, 0, sizeof (Ground) * size);
-  int i = 0;
+  int i = 0, j = 0, k = 0;
   for (i = 0; i < size; i++)
   {
     PtrGround ground = &((*ground_area) -> area[i]);
     ground_init (ground);
+		ground_set_position_X (ground, (i % array_width) * GROUND_WIDTH);
+		ground_set_position_Y (ground, (i / array_width) * GROUND_LENGTH);
+		ground_set_width (ground, GROUND_WIDTH);
+		ground_set_length (ground, GROUND_LENGTH);
   }
+  
+  for (i = 0; i < array_width; i++)
+	{
+		for (j = 0; j < array_length; j++)
+		{
+			// Parcours les 10 cases autour d'une zone
+			// Pour chacune, sauf la centrale (k = 4), on recupere le
+			// voisin.
+			for (k = 0; k < 10; k++)
+			{
+				PtrGround ground = ground_area_get_ground ((*ground_area), i, j);
+				int array_position_x = (i - 1) + k % 3;
+				int array_position_y = (j - 1) + (int) k / 3;
+				
+				if (k != 4 &&
+					array_position_x >= 0 &&
+					array_position_y >= 0 &&
+					array_position_x < array_width &&
+					array_position_y < array_length)
+				{
+					PtrGround ground_neighbour = ground_area_get_ground ((*ground_area), array_position_x, array_position_y);
+					ground_insert_ground_neighbour (ground, ground_neighbour);
+				}
+			}
+		}
+	}
 }
 
 /*!
