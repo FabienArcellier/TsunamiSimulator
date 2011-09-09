@@ -58,12 +58,7 @@ double ground_area_builder_get_water_position (PtrGroundAreaBuilder);
 /*!
  * \brief Assesseur en ecriture de la position de l'eau, defini entre 0 et 1
  */
-ground_area_builder_set_water_position (PtrGroundAreaBuilder, double);
-
-/*!
- * \brief Definit la largeur de la carte en m
- */
-void ground_area_builder_set_height (PtrGroundAreaBuilder);
+void ground_area_builder_set_water_position (PtrGroundAreaBuilder, double);
 
 /*!
  * \brief Renvoie le type de la carte a generer

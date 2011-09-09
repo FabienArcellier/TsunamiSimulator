@@ -11,6 +11,8 @@ EXEC=main
 
 all: $(BIN)/$(EXEC) copy_ui
 
+test_cyril:$(BIN)/ground_area_builder_tests
+
 tests: $(BIN)/angle_tests $(BIN)/event_tests $(BIN)/earthquake_event_tests $(BIN)/earthquake_event_spike $(BIN)/wave_propagation_event_tests $(BIN)/timeline_tests $(BIN)/propagation_timeline_processings_tests $(BIN)/wave_signal_tests $(BIN)/ground_tests $(BIN)/ground_neighbour_tests $(BIN)/ground_area_tests $(BIN)/ground_area_energy_map_tests $(BIN)/ground_view_spike $(BIN)/ground_area_text_storage_tests $(BIN)/earthquake_propagation_with_report_spike $(BIN)/earthquake_events_text_storage_tests tests_copy $(BIN)/earthquake_propagation_with_report_spike_with_map $(BIN)/ground_area_to_pixbuf_factory_tests $(BIN)/simulation_tests $(BIN)/simulation_text_storage_tests
 
 #################################
@@ -47,6 +49,9 @@ $(BIN)/ground_view_spike: $(OBJ)/wave_signal.o $(OBJ)/ground.o $(OBJ)/ground_nei
 	$(CC) $(LDFLAGS) -o $@ $^
 
 $(BIN)/ground_area_energy_map_tests: $(OBJ)/wave_signal.o $(OBJ)/ground.o $(OBJ)/ground_neighbour.o $(OBJ)/ground_area.o $(OBJ)/ground_area_energy_map.o $(OBJ)/ground_area_energy_map_tests.o
+	$(CC) $(LDFLAGS) -o $@ $^
+
+$(BIN)/ground_area_builder_tests: $(OBJ)/wave_signal.o $(OBJ)/ground.o $(OBJ)/ground_neighbour.o $(OBJ)/ground_area.o  $(OBJ)/ground_area_builder.o $(OBJ)/ground_area_builder_tests.o
 	$(CC) $(LDFLAGS) -o $@ $^
 
 $(BIN)/ground_area_tests: $(OBJ)/wave_signal.o $(OBJ)/ground.o $(OBJ)/ground_neighbour.o $(OBJ)/ground_area.o $(OBJ)/ground_area_tests.o
@@ -115,6 +120,9 @@ $(OBJ)/ground_area_text_storage.o : $(SRC)/ground_area_text_storage.c $(INCLUDES
 $(OBJ)/ground_area_energy_map.o : $(SRC)/ground_area_energy_map.c $(INCLUDES)/ground_area_energy_map.h
 	$(CC) $(CFLAGS) -o $@ -c $<
 
+$(OBJ)/ground_area_builder.o : $(SRC)/ground_area_builder.c $(INCLUDES)/ground_area_builder.h
+	$(CC) $(CFLAGS) -o $@ -c $<
+
 $(OBJ)/ground_area.o : $(SRC)/ground_area.c $(INCLUDES)/ground_area.h
 	$(CC) $(CFLAGS) -o $@ -c $<
 
@@ -176,6 +184,9 @@ $(OBJ)/simulation_tests.o : $(TESTS)/simulation_tests.c
 	$(CC) $(CFLAGS) -o $@ -c $<
 
 $(OBJ)/ground_area_energy_map_tests.o : $(TESTS)/ground_area_energy_map_tests.c
+	$(CC) $(CFLAGS) -o $@ -c $<
+
+$(OBJ)/ground_area_builder_tests.o : $(TESTS)/ground_area_builder_tests.c
 	$(CC) $(CFLAGS) -o $@ -c $<
 
 $(OBJ)/ground_area_tests.o : $(TESTS)/ground_area_tests.c
