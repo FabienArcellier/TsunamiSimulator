@@ -1,0 +1,39 @@
+format 76
+
+classcanvas 128003 class_ref 128387 // GroundAreaBuilder
+  draw_all_relations default hide_attributes default hide_operations default hide_getset_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_context default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_relation_visibility default show_infonote default shadow default show_stereotype_properties default
+  xyz 125 126 2000
+end
+note 128131 "Tu peux rajouter d'autres methodes pour ton usage personnel
+(décomposition fonctionnel, ...).
+Celle ci sont les seules que j'emploierai depuis l'exterieur."
+  xyzwh 382 141 2000 319 75
+classcanvas 128515 class_ref 128515 // GroundArea
+  draw_all_relations default hide_attributes default hide_operations default hide_getset_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_context default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_relation_visibility default show_infonote default shadow default show_stereotype_properties default
+  xyz 82 476 2000
+end
+classcanvas 128643 class_ref 128643 // Ground
+  draw_all_relations default hide_attributes default hide_operations default hide_getset_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_context default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_relation_visibility default show_infonote default shadow default show_stereotype_properties default
+  xyz 394 585 2000
+end
+note 129539 "Fichier ./includes/ground_area.h"
+  xyzwh 265 471 2000 185 37
+note 129667 "Fichier ./includes/ground.h"
+  xyzwh 594 491 2000 151 35
+relationcanvas 129283 relation_ref 128131 // <dependency>
+  from ref 128003 z 2001 to ref 128515
+  no_role_a no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+relationcanvas 129411 relation_ref 128259 // <dependency>
+  from ref 128515 z 2001 to ref 128643
+  no_role_a no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+line 128259 -_-_
+  from ref 128003 z 2001 to ref 128131
+line 129795 -_-_
+  from ref 128515 z 2001 to ref 129539
+line 129923 -_-_
+  from ref 128643 z 2001 to ref 129667
+end

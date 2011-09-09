@@ -1,0 +1,23 @@
+Eau :
+
+  Bleu clair : 0
+    Rouge : 40
+    Vert : 40
+    Bleu : 255
+    
+  Bleu fonce : 10 000
+    Rouge : 40
+    Vert : 40
+    Bleu : 200
+
+Terre :
+  Marron : 0
+
+    Rouge : 192
+    Vert: 139
+    Bleu : 33
+
+  Marron clair : 4000
+    Rouge : 192
+    Vert : 165
+    Bleu : 113

@@ -1,0 +1,236 @@
+format 76
+"Project" // Project
+  revision 1
+  modified_by 3 "Fabien_2"
+  // class settings
+  //class diagram settings
+  draw_all_relations default hide_attributes default hide_operations default hide_getset_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_context default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_relation_visibility default show_infonote default shadow default show_stereotype_properties default
+  //use case diagram settings
+  package_name_in_tab default show_context default auto_label_position default draw_all_relations default class_drawing_mode default shadow default show_stereotype_properties default
+  //sequence diagram settings
+  show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default show_stereotype_properties default show_class_context_mode default show_msg_context_mode default
+  //collaboration diagram settings
+  show_full_operations_definition default show_hierarchical_rank default write_horizontally default class_drawing_mode default drawing_language default package_name_in_tab default show_context default show_msg_context default draw_all_relations default shadow default show_stereotype_properties default
+  //object diagram settings
+   write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default show_stereotype_properties default
+  //component diagram settings
+  package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+  draw_component_as_icon default show_component_req_prov default show_component_rea default show_stereotype_properties default
+  //deployment diagram settings
+  package_name_in_tab default show_context default write_horizontally default auto_label_position default draw_all_relations default shadow default
+  draw_component_as_icon default show_component_req_prov default show_component_rea default show_stereotype_properties default
+  //state diagram settings
+  package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+  show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+  //activity diagram settings
+  package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+  show_infonote default drawing_language default show_stereotype_properties default
+  
+  componentview 128003 "Planning"
+    //component diagram settings
+    package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+    draw_component_as_icon default show_component_req_prov default show_component_rea default show_stereotype_properties default
+    componentdiagram 128131 "Planning"
+      package_name_in_tab default show_context default auto_label_position default draw_all_relations no shadow default
+      draw_component_as_icon default show_component_req_prov default show_component_rea default show_stereotype_properties default
+      size A0
+    end
+
+    component 128003 "Livraison"
+    end
+
+    component 128131 "IHM generation du terrain"
+      simplerelation 129283
+	-_->
+	  on component_ref 129283 // IHM general
+      end
+    end
+
+    component 128259 "Validation"
+      simplerelation 128003
+	-_->
+	  on component_ref 128003 // Livraison
+      end
+    end
+
+    component 128387 "Packaging"
+      simplerelation 128131
+	-_->
+	  on component_ref 128259 // Validation
+      end
+    end
+
+    component 128515 "Programmation de generation du terrain"
+      simplerelation 128515
+	-_->
+	  on component_ref 128643 // Validation de génération du terrain
+      end
+    end
+
+    component 128643 "Validation de génération du terrain"
+      simplerelation 128387
+	-_->
+	  on component_ref 128131 // IHM generation du terrain
+      end
+    end
+
+    component 128771 "Architecture de generation du terrain"
+      simplerelation 128643
+	-_->
+	  on component_ref 128515 // Programmation de generation du terrain
+      end
+    end
+
+    component 128899 "Besoin de generation du terrain"
+      simplerelation 128771
+	-_->
+	  on component_ref 128771 // Architecture de generation du terrain
+      end
+
+      simplerelation 129155
+	-_->
+	  on component_ref 129155 // Maquette IHM sur Inkscape
+      end
+
+      simplerelation 129667
+	-_->
+	  on component_ref 129539 // Modele de donnee terrain
+      end
+    end
+
+    component 129027 "Creation fichier IHM sur glade"
+      simplerelation 128899
+	-_->
+	  on component_ref 128131 // IHM generation du terrain
+      end
+    end
+
+    component 129155 "Maquette IHM sur Inkscape"
+      simplerelation 129027
+	-_->
+	  on component_ref 129027 // Creation fichier IHM sur glade
+      end
+    end
+
+    component 129283 "IHM general"
+      simplerelation 129411
+	-_->
+	  on component_ref 128387 // Packaging
+      end
+    end
+
+    component 129411 "IHM configuration seisme"
+      simplerelation 129539
+	-_->
+	  on component_ref 129283 // IHM general
+      end
+    end
+
+    component 129539 "Modele de donnee terrain"
+      simplerelation 129795
+	-_->
+	  on component_ref 128771 // Architecture de generation du terrain
+      end
+
+      simplerelation 129923
+	-_->
+	  on component_ref 129667 // Visualisation Terrain
+      end
+
+      simplerelation 130307
+	-_->
+	  on component_ref 129795 // Specification Visualisation terrain
+      end
+
+      simplerelation 130819
+	-_->
+	  on component_ref 130179 // Composant d'enregistrement Seisme
+      end
+
+      simplerelation 131843
+	-_->
+	  on component_ref 130819 // Module de calcul
+      end
+    end
+
+    component 129667 "Visualisation Terrain"
+      simplerelation 130051
+	-_->
+	  on component_ref 128131 // IHM generation du terrain
+      end
+
+      simplerelation 130179
+	-_->
+	  on component_ref 129411 // IHM configuration seisme
+      end
+
+      simplerelation 131203
+	-_->
+	  on component_ref 130307 // IHM calculation
+      end
+    end
+
+    component 129795 "Specification Visualisation terrain"
+      simplerelation 130435
+	-_->
+	  on component_ref 129667 // Visualisation Terrain
+      end
+    end
+
+    component 129923 "Maquette IHM configuration seisme"
+      simplerelation 130563
+	-_->
+	  on component_ref 129411 // IHM configuration seisme
+      end
+    end
+
+    component 130051 "Besoin de configuration seisme"
+      simplerelation 130691
+	-_->
+	  on component_ref 129923 // Maquette IHM configuration seisme
+      end
+    end
+
+    component 130179 "Composant d'enregistrement Seisme"
+      simplerelation 130947
+	-_->
+	  on component_ref 129411 // IHM configuration seisme
+      end
+    end
+
+    component 130307 "IHM calculation"
+      simplerelation 131075
+	-_->
+	  on component_ref 130307 // IHM calculation
+      end
+    end
+
+    component 130435 "IHM visualisation"
+      simplerelation 131587
+	-_->
+	  on component_ref 129283 // IHM general
+      end
+    end
+
+    component 130563 "Besoin de visualisation"
+      simplerelation 131331
+	-_->
+	  on component_ref 130691 // Architecture de visualisation
+      end
+    end
+
+    component 130691 "Architecture de visualisation"
+      simplerelation 131459
+	-_->
+	  on component_ref 130435 // IHM visualisation
+      end
+    end
+
+    component 130819 "Module de calcul"
+      simplerelation 131715
+	-_->
+	  on component_ref 130307 // IHM calculation
+      end
+    end
+  end
+end

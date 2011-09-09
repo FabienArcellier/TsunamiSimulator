@@ -1,0 +1,177 @@
+format 76
+
+componentcanvas 128003 component_ref 128003 // Livraison
+  draw_component_as_icon default show_component_req_prov default show_component_rea default show_stereotype_properties default
+  xyzwh 2425.1 616.6 2000 143 51
+end
+componentcanvas 128131 component_ref 128131 // IHM generation du terrain
+  draw_component_as_icon default show_component_req_prov default show_component_rea default show_stereotype_properties default
+  xyzwh 1607.6 765.9 2000 153 51
+end
+componentcanvas 128259 component_ref 128259 // Validation
+  draw_component_as_icon default show_component_req_prov default show_component_rea default show_stereotype_properties default
+  xyzwh 2261.7 619.1 2000 143 51
+end
+componentcanvas 128387 component_ref 128387 // Packaging
+  draw_component_as_icon default show_component_req_prov default show_component_rea default show_stereotype_properties default
+  xyzwh 2039.3 617.7 2005 143 51
+end
+componentcanvas 128899 component_ref 128515 // Programmation de generation du terrain
+  draw_component_as_icon default show_component_req_prov default show_component_rea default show_stereotype_properties default
+  xyzwh 969.1 650 2000 235 51
+end
+componentcanvas 129027 component_ref 128643 // Validation de génération du terrain
+  draw_component_as_icon default show_component_req_prov default show_component_rea default show_stereotype_properties default
+  xyzwh 1231.7 653.5 2000 203 51
+end
+componentcanvas 129411 component_ref 128771 // Architecture de generation du terrain
+  draw_component_as_icon default show_component_req_prov default show_component_rea default show_stereotype_properties default
+  xyzwh 707.1 655.7 2000 219 51
+end
+componentcanvas 129667 component_ref 128899 // Besoin de generation du terrain
+  draw_component_as_icon default show_component_req_prov default show_component_rea default show_stereotype_properties default
+  xyzwh 477.3 656.6 2000 187 51
+end
+componentcanvas 129923 component_ref 129027 // Creation fichier IHM sur glade
+  draw_component_as_icon default show_component_req_prov default show_component_rea default show_stereotype_properties default
+  xyzwh 970 830 2000 175 51
+end
+componentcanvas 130179 component_ref 129155 // Maquette IHM sur Inkscape
+  draw_component_as_icon default show_component_req_prov default show_component_rea default show_stereotype_properties default
+  xyzwh 709.3 830.2 2000 163 51
+end
+componentcanvas 130947 component_ref 129283 // IHM general
+  draw_component_as_icon default show_component_req_prov default show_component_rea default show_stereotype_properties default
+  xyzwh 1868.4 617.7 2000 143 51
+end
+componentcanvas 131331 component_ref 129411 // IHM configuration seisme
+  draw_component_as_icon default show_component_req_prov default show_component_rea default show_stereotype_properties default
+  xyzwh 1559.6 366.9 2000 153 51
+end
+componentcanvas 131587 component_ref 129539 // Modele de donnee terrain
+  draw_component_as_icon default show_component_req_prov default show_component_rea default show_stereotype_properties default
+  xyzwh 582.2 505.9 2000 155 51
+end
+componentcanvas 131971 component_ref 129667 // Visualisation Terrain
+  draw_component_as_icon default show_component_req_prov default show_component_rea default show_stereotype_properties default
+  xyzwh 1326 519.1 2000 143 51
+end
+componentcanvas 132483 component_ref 129795 // Specification Visualisation terrain
+  draw_component_as_icon default show_component_req_prov default show_component_rea default show_stereotype_properties default
+  xyzwh 936.7 513.5 2000 197 51
+end
+componentcanvas 132867 component_ref 129923 // Maquette IHM configuration seisme
+  draw_component_as_icon default show_component_req_prov default show_component_rea default show_stereotype_properties default
+  xyzwh 1081 369 2000 209 51
+end
+componentcanvas 133123 component_ref 130051 // Besoin de configuration seisme
+  draw_component_as_icon default show_component_req_prov default show_component_rea default show_stereotype_properties default
+  xyzwh 473 369 2000 189 51
+end
+componentcanvas 133379 component_ref 130179 // Composant d'enregistrement Seisme
+  draw_component_as_icon default show_component_req_prov default show_component_rea default show_stereotype_properties default
+  xyzwh 1070 241 2000 223 51
+end
+componentcanvas 133763 component_ref 130307 // IHM calculation
+  draw_component_as_icon default show_component_req_prov default show_component_rea default show_stereotype_properties default
+  xyzwh 1412 154 2000 143 51
+end
+componentcanvas 133891 component_ref 130435 // IHM visualisation
+  draw_component_as_icon default show_component_req_prov default show_component_rea default show_stereotype_properties default
+  xyzwh 1562 48 2000 143 51
+end
+componentcanvas 134659 component_ref 130563 // Besoin de visualisation
+  draw_component_as_icon default show_component_req_prov default show_component_rea default show_stereotype_properties default
+  xyzwh 475 38 2000 143 51
+end
+componentcanvas 134787 component_ref 130691 // Architecture de visualisation
+  draw_component_as_icon default show_component_req_prov default show_component_rea default show_stereotype_properties default
+  xyzwh 938 42 2000 171 51
+end
+componentcanvas 135427 component_ref 130819 // Module de calcul
+  draw_component_as_icon default show_component_req_prov default show_component_rea default show_stereotype_properties default
+  xyzwh 1067 129 2000 143 51
+end
+simplerelationcanvas 128515 simplerelation_ref 128003
+  from ref 128259 z 2001 to ref 128003
+end
+simplerelationcanvas 128643 simplerelation_ref 128131
+  from ref 128387 z 2006 to ref 128259
+end
+simplerelationcanvas 129155 simplerelation_ref 128387
+  from ref 129027 z 2001 to ref 128131
+end
+simplerelationcanvas 129283 simplerelation_ref 128515
+  from ref 128899 z 2001 to ref 129027
+end
+simplerelationcanvas 129539 simplerelation_ref 128643
+  from ref 129411 z 2001 to ref 128899
+end
+simplerelationcanvas 130051 simplerelation_ref 128899
+  from ref 129923 z 2001 to ref 128131
+end
+simplerelationcanvas 130307 simplerelation_ref 129027
+  from ref 130179 z 2001 to ref 129923
+end
+simplerelationcanvas 130435 simplerelation_ref 129155
+  from ref 129667 z 2001 to ref 130179
+end
+simplerelationcanvas 131075 simplerelation_ref 129283
+  from ref 128131 z 2001 to ref 130947
+end
+simplerelationcanvas 131203 simplerelation_ref 129411
+  from ref 130947 z 2006 to ref 128387
+end
+simplerelationcanvas 131459 simplerelation_ref 129539
+  from ref 131331 z 2001 to ref 130947
+end
+simplerelationcanvas 131715 simplerelation_ref 129667
+  from ref 129667 z 2001 to ref 131587
+end
+simplerelationcanvas 131843 simplerelation_ref 129795
+  from ref 131587 z 2001 to ref 129411
+end
+simplerelationcanvas 132227 simplerelation_ref 130051
+  from ref 131971 z 2001 to ref 128131
+end
+simplerelationcanvas 132355 simplerelation_ref 130179
+  from ref 131971 z 2001 to ref 131331
+end
+simplerelationcanvas 132611 simplerelation_ref 130307
+  from ref 131587 z 2001 to ref 132483
+end
+simplerelationcanvas 132739 simplerelation_ref 130435
+  from ref 132483 z 2001 to ref 131971
+end
+simplerelationcanvas 132995 simplerelation_ref 130563
+  from ref 132867 z 2001 to ref 131331
+end
+simplerelationcanvas 133251 simplerelation_ref 130691
+  from ref 133123 z 2001 to ref 132867
+end
+simplerelationcanvas 133507 simplerelation_ref 130819
+  from ref 131587 z 2001 to ref 133379
+end
+simplerelationcanvas 133635 simplerelation_ref 130947
+  from ref 133379 z 2001 to ref 131331
+end
+simplerelationcanvas 134531 simplerelation_ref 131203
+  from ref 131971 z 2001 to ref 133763
+end
+simplerelationcanvas 134915 simplerelation_ref 131331
+  from ref 134659 z 2001 to ref 134787
+end
+simplerelationcanvas 135043 simplerelation_ref 131459
+  from ref 134787 z 2001 to ref 133891
+end
+simplerelationcanvas 135171 simplerelation_ref 131587
+  from ref 133891 z 2001 to point 1822 169
+  line 135299 z 2001 to ref 130947
+end
+simplerelationcanvas 135555 simplerelation_ref 131715
+  from ref 135427 z 2001 to ref 133763
+end
+simplerelationcanvas 135683 simplerelation_ref 131843
+  from ref 131587 z 2001 to ref 135427
+end
+end
