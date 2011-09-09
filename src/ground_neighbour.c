@@ -113,6 +113,10 @@ void ground_neighbour_calculate_direction (PtrGroundNeighbour ground_neighbour)
 	
 	// Decalage de repere pour optenir l'angle 0 au nord
 	direction = fmod(direction + 90.0, 360.0);
+	if (direction < 0.0)
+	{
+		direction = direction + 360.0;
+	}
 	
 	ground_neighbour -> direction = direction;
 }

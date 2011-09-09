@@ -1,4 +1,5 @@
 #include "test.h"
+#include "wave_signal.h"
 #include "ground.h"
 #include "ground_area.h"
 #include "ground_area_text_storage.h"

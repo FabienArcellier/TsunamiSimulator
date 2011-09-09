@@ -7,6 +7,8 @@ void angle_shortener_rotation_tests ();
 int main (void)
 {
 	angle_shortener_rotation_tests ();
+	
+	return 0;
 }
 
 void angle_shortener_rotation_tests ()

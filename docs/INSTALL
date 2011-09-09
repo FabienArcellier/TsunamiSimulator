@@ -1,0 +1,10 @@
+Pour compiler ce programme, il est important de disposer de la librairie de developpement GTK.
+
+Pour l'installer, tapez la commande suivante :
+	- sudo apt-get install libgtk2.0-dev
+	
+Pour compiler le programme, allez dans le dossier build et tapez :
+	- make all
+	
+Pour compiler les tests unitaires, allez dans le dossier build, tapez :
+	- make tests

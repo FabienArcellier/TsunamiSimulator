@@ -1,115 +1,350 @@
+#include <assert.h>
+#include <string.h>
 #include <gtk/gtk.h>
-#include "colored_pixbuf_factory.h"
-#include "water_hmap.h"
-#include "water_simulation_engine.h"
-#include "water_rendering_engine.h"
-#include "point_water_transformation.h"
-#include "ui/main_ui.h"
-#include "ui/main_builder.h"
+#include "wave_signal.h"
+#include "debug.h"
+#include "ground.h"
+#include "ground_area.h"
+#include "ground_area_text_storage.h"
+#include "ground_area_energy_map.h"
+#include "ground_area_energy_text_storage.h"
+#include "event.h"
+#include "earthquake_event.h"
+#include "earthquake_events_text_storage.h"
+#include "timeline.h"
+#include "propagation_timeline_processings.h"
+#include "simulation.h"
+#include "simulation_text_storage.h"
 
-#define DRAWING_AREA_WIDTH 200
-#define DRAWING_AREA_HEIGHT 200
 #define FRAME_DELAY 50
 #define UI_GLADE "ui"
 
-static void main_destroy (GtkWidget *window, gpointer data);
+static PtrSimulation simulation = NULL;
 
-static void init_frame_before_water_rendering (PtrMainUI);
-static void init_water_rendering_engine (PtrMainUI);
-static void init_water_simulation_engine (PtrMainUI);
+typedef struct calculate_window
+{
+	GtkWindow *window;
+	GtkButton *cancel_button;
+	GtkProgressBar *progressbar;
+	int cancel_operation;
+} CalculateWindow;
 
-static gint refresh_simulation_state (gpointer);
+static CalculateWindow calculate_window;
+
+typedef struct simulate_window
+{
+	GtkWindow *window;
+	GtkDrawingArea *drawingarea;
+	GtkButton *play_button;
+	GtkButton *pause_button;
+	GtkButton *stop_button;
+} SimulateWindow;
+
+static SimulateWindow simulate_window;
+
+typedef struct main_window
+{
+	GtkWindow *window;
+	GtkMenuItem *open_menu;
+	GtkMenuItem *save_menu;
+	GtkMenuItem *quit;
+	GtkButton *calculate_button;
+	GtkButton *simulate_button;
+	int file_open;
+	int interface_locked;
+	char filename[255];
+} MainWindow;
+
+static MainWindow main_window;
+
+void init_main_window ();
+
+static void main_window_destroy (GtkWidget *window, gpointer data);
+static void calculate_window_destroy (GtkWidget *window, gpointer data);
+static void simulate_window_destroy (GtkWidget *window, gpointer data);
+
+void refresh_main_window (MainWindow* main_window);
+void refresh_calculate_window (CalculateWindow* calculate_window);
+void refresh_simulate_window (SimulateWindow* simulate_window);
+
+void on_menu_file_action_quit_activate (GtkWidget*, MainWindow*);
+void on_calculate_button_clicked (GtkWidget*, MainWindow*);
+void on_simulate_button_clicked (GtkWidget*, MainWindow*);
+void on_cancel_button_clicked (GtkWidget*, CalculateWindow*);
+
+void on_open_menu_activate (GtkWidget*, MainWindow*);
+void on_save_menu_activate (GtkWidget*, MainWindow*);
+
+void on_main_show (GtkWidget*, MainWindow*);
+void *calculate_simulation ();
 
 int main (int argc, char *argv[])
 {
   gtk_init (&argc, &argv);
+	init_main_window ();
   
-  PtrMainBuilder main_builder = NULL;
-  PtrMainUI main_ui = NULL;
-  
-  main_builder_create (&main_builder);
-  main_builder_set_ui_repository_path (main_builder, UI_GLADE);
-  main_ui = main_builder_build (main_builder);
-  
-  g_signal_connect (G_OBJECT (main_ui -> window), "destroy", G_CALLBACK(main_destroy), NULL);
-  
-  init_frame_before_water_rendering (main_ui);
-  init_water_rendering_engine (main_ui);
-  init_water_simulation_engine (main_ui);
-  
-  g_timeout_add (FRAME_DELAY, refresh_simulation_state, (gpointer) main_ui);
-  
-  gtk_widget_show_all (main_ui -> window);
+	gtk_widget_show_all (GTK_WIDGET(main_window.window));
   
   gtk_main();
   return 0;
 }
 
-static void init_frame_before_water_rendering (PtrMainUI main_ui)
+void init_main_window ()
 {
-  /* Construit l'image initiale */
-  PtrColoredPixbufFactory factory = NULL;
-  colored_pixbuf_factory_create(&factory);
-  factory -> width = DRAWING_AREA_WIDTH;
-  factory -> height = DRAWING_AREA_HEIGHT;
-  factory -> red = 128;
-  factory -> blue = 128;
-  factory -> green = 128;
-  GdkPixbuf* frame = colored_pixbuf_factory_instanciate(factory);
-  GdkPixbuf* frame_to_display = colored_pixbuf_factory_instanciate(factory);
-  colored_pixbuf_factory_destroy(&factory);
+	GtkBuilder *builder = NULL;
+  GError *error = NULL;
+  char main_path[255];
+  memset(main_path, 0, sizeof (char) * 255);
+  sprintf(main_path, "%s/main.glade", UI_GLADE);
+	
+	builder = gtk_builder_new();
+	if (!gtk_builder_add_from_file (builder, main_path, &error))
+  {
+    g_warning ("Couldn't load builder file: %s", error -> message);
+    g_error_free (error);
+  }
   
-  main_ui_set_frame_before_water_rendering (main_ui, frame);
-  main_ui_set_frame_to_display (main_ui, frame_to_display);
+  main_window.window = GTK_WINDOW (gtk_builder_get_object (builder, "main"));
+	main_window.quit = GTK_MENU_ITEM (gtk_builder_get_object (builder, "menu_file_action_quit"));
+	main_window.open_menu = GTK_MENU_ITEM (gtk_builder_get_object (builder, "open_menu"));
+	main_window.save_menu = GTK_MENU_ITEM (gtk_builder_get_object (builder, "save_menu"));
+	main_window.calculate_button = GTK_BUTTON (gtk_builder_get_object (builder, "calculate_button"));
+	main_window.simulate_button = GTK_BUTTON (gtk_builder_get_object (builder, "simulate_button"));
+	
+	main_window.file_open = 0;
+	main_window.interface_locked = 0;
+	
+	gtk_builder_connect_signals (builder, (gpointer) &main_window);
+	g_signal_connect (G_OBJECT (main_window.window), "destroy", G_CALLBACK(main_window_destroy), NULL);
+	
+	refresh_main_window (&main_window);
 }
 
-static void init_water_rendering_engine (PtrMainUI main_ui)
+void refresh_main_window (MainWindow* main_window_local)
 {
-  PtrWaterRenderingEngine water_rendering_engine = NULL;
-  water_rendering_engine_create (&water_rendering_engine);
-  
-  main_ui_set_water_rendering_engine (main_ui, water_rendering_engine);
+	assert (main_window_local -> calculate_button != NULL);
+	assert (main_window_local -> simulate_button != NULL);
+	assert (main_window_local -> save_menu != NULL);
+	assert (main_window_local -> open_menu != NULL);
+	assert (main_window_local -> quit != NULL);
+	
+	
+	if (main_window_local -> file_open == 0 || main_window_local -> interface_locked == 1)
+	{
+		gtk_widget_set_sensitive (GTK_WIDGET(main_window_local -> calculate_button), FALSE);
+		gtk_widget_set_sensitive (GTK_WIDGET(main_window_local -> simulate_button), FALSE);
+		gtk_widget_set_sensitive (GTK_WIDGET(main_window_local -> save_menu), FALSE);
+	}
+	else
+	{
+		gtk_widget_set_sensitive (GTK_WIDGET(main_window_local -> calculate_button), TRUE);
+		gtk_widget_set_sensitive (GTK_WIDGET(main_window_local -> simulate_button), TRUE);
+		gtk_widget_set_sensitive (GTK_WIDGET(main_window_local -> save_menu), TRUE);
+	}
+	
+	if (main_window_local -> interface_locked == 1)
+	{
+		gtk_widget_set_sensitive (GTK_WIDGET(main_window_local -> open_menu), FALSE);
+		gtk_widget_set_sensitive (GTK_WIDGET(main_window_local -> quit), FALSE);
+	}
+	else
+	{
+		gtk_widget_set_sensitive (GTK_WIDGET(main_window_local -> open_menu), TRUE);
+		gtk_widget_set_sensitive (GTK_WIDGET(main_window_local -> quit), TRUE);
+	}
 }
 
-static void init_water_simulation_engine (PtrMainUI main_ui)
+void init_calculate_window ()
 {
-  PtrWaterSimulationEngine water_simulation_engine = NULL;
-  water_simulation_engine_create(&water_simulation_engine, DRAWING_AREA_WIDTH, DRAWING_AREA_HEIGHT);
+	GtkBuilder *builder = NULL;
+  GError *error = NULL;
+  char main_path[255];
+  memset(main_path, 0, sizeof (char) * 255);
+  sprintf(main_path, "%s/calculate.glade", UI_GLADE);
+	
+	builder = gtk_builder_new();
+	if (!gtk_builder_add_from_file (builder, main_path, &error))
+  {
+    g_warning ("Couldn't load builder file: %s", error -> message);
+    g_error_free (error);
+  }
   
-  main_ui_set_water_simulation_engine (main_ui, water_simulation_engine);
+  calculate_window.window = GTK_WINDOW (gtk_builder_get_object (builder, "main"));
+	calculate_window.cancel_button = GTK_BUTTON (gtk_builder_get_object (builder, "cancel_button"));
+	calculate_window.progressbar = GTK_PROGRESS_BAR (gtk_builder_get_object (builder, "progressbar"));
+	
+	gtk_builder_connect_signals (builder, (gpointer) &calculate_window);
+	g_signal_connect (G_OBJECT (calculate_window.window), "destroy", G_CALLBACK(calculate_window_destroy), NULL);
+	
+	calculate_window.cancel_operation = 0;
+	
+	refresh_main_window (&main_window);
 }
 
-static gint refresh_simulation_state (gpointer data)
+void init_simulate_window ()
 {
-  //g_debug ("refresh_simulation_state");
-  PtrMainUI main_ui = (PtrMainUI) data;
-  PtrWaterRenderingEngine water_rendering_engine = NULL;
-  PtrWaterSimulationEngine water_simulation_engine = NULL;
-  water_rendering_engine = main_ui_get_water_rendering_engine (main_ui);
-  water_simulation_engine = main_ui_get_water_simulation_engine (main_ui);
+	GtkBuilder *builder = NULL;
+  GError *error = NULL;
+  char main_path[255];
+  memset(main_path, 0, sizeof (char) * 255);
+  sprintf(main_path, "%s/simulate.glade", UI_GLADE);
+	
+	builder = gtk_builder_new();
+	if (!gtk_builder_add_from_file (builder, main_path, &error))
+  {
+    g_warning ("Couldn't load builder file: %s", error -> message);
+    g_error_free (error);
+  }
   
-  water_simulation_engine_set_next_hmap(water_simulation_engine);
-  
-  GdkPixbuf *frame_before_water_rendering = NULL, *frame_to_display = NULL;
-  frame_before_water_rendering = main_ui_get_frame_before_water_rendering (main_ui);
-  frame_to_display = main_ui_get_frame_to_display (main_ui);
-  gdk_pixbuf_copy_area (frame_before_water_rendering, 0, 0, DRAWING_AREA_WIDTH, DRAWING_AREA_HEIGHT,frame_to_display, 0, 0);
+  simulate_window.window = GTK_WINDOW (gtk_builder_get_object (builder, "main"));
+	simulate_window.drawingarea = GTK_DRAWING_AREA (gtk_builder_get_object (builder, "drawingarea"));
+	simulate_window.play_button = GTK_BUTTON (gtk_builder_get_object (builder, "play_button"));
+	simulate_window.pause_button = GTK_BUTTON (gtk_builder_get_object (builder, "pause_button"));
+	simulate_window.stop_button = GTK_BUTTON (gtk_builder_get_object (builder, "stop_button"));
+	
+	gtk_builder_connect_signals (builder, (gpointer) &simulate_window);
+	g_signal_connect (G_OBJECT (simulate_window.window), "destroy", G_CALLBACK(simulate_window_destroy), NULL);
 
-  water_rendering_engine_set_water_hmap (water_rendering_engine, water_simulation_engine_get_current_hmap(water_simulation_engine));
-  water_rendering_engine_set_frame (water_rendering_engine, frame_to_display);
-  water_rendering_engine_rendering_water (water_rendering_engine);
-  
-  GtkDrawingArea* drawing_area = main_ui -> drawing_area;
-  
-  GDK_THREADS_ENTER ();
-  gtk_widget_queue_draw (GTK_WIDGET(drawing_area));
-  GDK_THREADS_LEAVE ();
-  
-  return TRUE;
 }
 
-static void main_destroy(GtkWidget *window, gpointer data)
+
+static void main_window_destroy(GtkWidget *window, gpointer data)
 {
   g_debug ("main_destroy triggs");
   gtk_main_quit();
+}
+
+static void calculate_window_destroy (GtkWidget *window, gpointer data)
+{
+	main_window.interface_locked = 0;
+	refresh_main_window (&main_window);
+}
+
+static void simulate_window_destroy (GtkWidget *window, gpointer data)
+{
+	main_window.interface_locked = 0;
+	refresh_main_window (&main_window);
+}
+
+void on_menu_file_action_quit_activate (GtkWidget *menu, MainWindow *main_window)
+{
+	gtk_widget_destroy (GTK_WIDGET (main_window -> window));
+}
+
+void on_calculate_button_clicked (GtkWidget *calculate_button, MainWindow *main_window_local)
+{
+	g_debug ("on_calculate_button_clicked");
+	init_calculate_window ();
+	main_window_local -> interface_locked = 1;
+	refresh_main_window (main_window_local);
+	
+	gtk_widget_show_all (GTK_WIDGET (calculate_window.window));
+	//calculate_simulation();
+}
+
+void on_simulate_button_clicked (GtkWidget *calculate_button, MainWindow *main_window_local)
+{
+	init_simulate_window ();
+	main_window_local -> interface_locked = 1;
+	refresh_main_window (main_window_local);
+	
+	gtk_widget_show_all (GTK_WIDGET (simulate_window.window));
+}
+ 
+void on_open_menu_activate (GtkWidget *widget, MainWindow *main_window_local)
+{
+	assert (main_window_local != NULL);
+	g_debug ("on_open_menu_activate");
+	
+	GtkWidget *dialog = NULL;
+  gchar *filename = NULL;
+  
+  dialog = gtk_file_chooser_dialog_new ("Open File ...",
+                                        main_window_local -> window,
+                                        GTK_FILE_CHOOSER_ACTION_OPEN,
+                                        GTK_STOCK_CANCEL,
+                                        GTK_RESPONSE_CANCEL,
+                                        GTK_STOCK_OPEN, 
+                                        GTK_RESPONSE_ACCEPT,
+                                        NULL);
+  
+  gint result = gtk_dialog_run (GTK_DIALOG (dialog));
+  if (result == GTK_RESPONSE_ACCEPT)
+  {
+    filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
+		g_debug (filename);
+		
+		FILE* file = fopen (filename, "r");
+		PtrSimulationTextStorage simulation_text_storage = NULL;
+		simulation_text_storage_create (&simulation_text_storage);
+		simulation_text_storage_set_file (simulation_text_storage, file);
+		simulation = simulation_text_storage_read_file (simulation_text_storage);
+		simulation_text_storage_destroy (&simulation_text_storage);
+		fclose (file);
+		
+		if (simulation != NULL)
+		{
+			strcpy(main_window_local -> filename, filename);
+			main_window_local -> file_open = 1;
+		}
+		
+		refresh_main_window (main_window_local);
+  }
+  else
+	{
+		refresh_main_window (main_window_local);
+	}
+	
+  gtk_widget_destroy (dialog);
+}
+
+void on_save_menu_activate (GtkWidget *widget, MainWindow *main_window_local)
+{
+}
+
+void on_cancel_button_clicked (GtkWidget *widget, CalculateWindow *calculate_window_local)
+{
+	calculate_window.cancel_operation = 1;
+}
+
+void calculate_simulation ()
+{	
+	PtrTimeline timeline = simulation_get_timeline (simulation);
+	PtrGroundArea ground_area = simulation_get_ground_area (simulation);
+	PtrGroundAreaEnergyMap ground_area_energy_map = simulation -> file_ground_area_energy_map;
+	
+	int final_time = timeline_get_final_time (timeline);
+	gtk_progress_bar_set_activity_blocks (calculate_window.progressbar, final_time);
+	
+	while (timeline_get_current_time (timeline) < final_time && calculate_window.cancel_operation == 0)
+	{
+		register_events_for_propagation_on_timeline_from_ground_area (timeline,
+																																	ground_area);
+		timeline_execute_events (timeline);
+		simplify_wave_signals_after_propagation_on_ground_area (ground_area);
+		
+		PtrGroundAreaEnergyMap ground_area_energy_map = NULL;
+		ground_area_energy_map_create (&ground_area_energy_map, ground_area);
+		
+		gtk_progress_bar_get_pulse_step (calculate_window.progressbar);
+		timeline_move_current_time (timeline, 1);
+		simulation_set_push_energy_map (simulation, ground_area_energy_map);
+		
+		if (gtk_events_pending())
+		{
+			DEBUG_IF (1, "%s", "test");
+			gtk_main_iteration();
+		}
+	}
+	
+	if (calculate_window.cancel_operation == 1)
+	{
+		while (simulation_energy_map_empty (simulation) == 0)
+		{
+			PtrGroundAreaEnergyMap energy_map = simulation_set_pop_energy_map (simulation);
+			ground_area_energy_map_destroy (&energy_map);
+		}
+	}
+	
+	calculate_window.cancel_operation = 0;
 }

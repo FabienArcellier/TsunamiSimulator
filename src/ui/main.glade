@@ -3,28 +3,65 @@
   <requires lib="gtk+" version="2.16"/>
   <!-- interface-naming-policy project-wide -->
   <object class="GtkWindow" id="main">
+    <property name="can_focus">False</property>
     <property name="resizable">False</property>
-    <signal name="destroy" handler="on_main_destroy"/>
     <child>
       <object class="GtkVBox" id="vbox1">
+        <property name="width_request">300</property>
+        <property name="height_request">200</property>
         <property name="visible">True</property>
+        <property name="can_focus">False</property>
         <child>
           <object class="GtkMenuBar" id="menu">
             <property name="visible">True</property>
+            <property name="can_focus">False</property>
             <property name="ubuntu_local">True</property>
             <child>
               <object class="GtkMenuItem" id="menu_file">
                 <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="use_action_appearance">False</property>
                 <property name="label" translatable="yes">_File</property>
                 <property name="use_underline">True</property>
                 <child type="submenu">
                   <object class="GtkMenu" id="menu1">
                     <property name="visible">True</property>
+                    <property name="can_focus">False</property>
                     <property name="ubuntu_local">True</property>
+                    <child>
+                      <object class="GtkMenuItem" id="open_menu">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="use_action_appearance">False</property>
+                        <property name="label" translatable="yes">Open ...</property>
+                        <property name="use_underline">True</property>
+                        <signal name="activate" handler="on_open_menu_activate" swapped="no"/>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkMenuItem" id="save_menu">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="use_action_appearance">False</property>
+                        <property name="label" translatable="yes">Save</property>
+                        <property name="use_underline">True</property>
+                        <signal name="activate" handler="on_save_menu_activate" swapped="no"/>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkSeparatorMenuItem" id="separator">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="use_action_appearance">False</property>
+                      </object>
+                    </child>
                     <child>
                       <object class="GtkMenuItem" id="menu_file_action_quit">
                         <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="use_action_appearance">False</property>
                         <property name="label" translatable="yes">Quit</property>
+                        <signal name="activate" handler="on_menu_file_action_quit_activate" swapped="no"/>
                       </object>
                     </child>
                   </object>
@@ -32,22 +69,10 @@
               </object>
             </child>
             <child>
-              <object class="GtkMenuItem" id="menuitem2">
-                <property name="visible">True</property>
-                <property name="label" translatable="yes">_Edit</property>
-                <property name="use_underline">True</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkMenuItem" id="menuitem3">
-                <property name="visible">True</property>
-                <property name="label" translatable="yes">_View</property>
-                <property name="use_underline">True</property>
-              </object>
-            </child>
-            <child>
               <object class="GtkMenuItem" id="menuitem4">
                 <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="use_action_appearance">False</property>
                 <property name="label" translatable="yes">_Help</property>
                 <property name="use_underline">True</property>
               </object>
@@ -55,65 +80,44 @@
           </object>
           <packing>
             <property name="expand">False</property>
+            <property name="fill">True</property>
             <property name="position">0</property>
           </packing>
         </child>
         <child>
-          <object class="GtkToolbar" id="toolbar">
+          <object class="GtkButton" id="calculate_button">
+            <property name="label" translatable="yes">Calculate ...</property>
             <property name="visible">True</property>
-            <child>
-              <object class="GtkToggleToolButton" id="mode_point">
-                <property name="visible">True</property>
-                <property name="label" translatable="yes">Point</property>
-                <property name="use_underline">True</property>
-                <property name="stock_id">gtk-dnd</property>
-                <property name="active">True</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="homogeneous">True</property>
-              </packing>
-            </child>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <property name="border_width">20</property>
+            <property name="use_action_appearance">False</property>
+            <signal name="clicked" handler="on_calculate_button_clicked" swapped="no"/>
           </object>
           <packing>
             <property name="expand">False</property>
+            <property name="fill">False</property>
             <property name="position">1</property>
           </packing>
         </child>
         <child>
-          <object class="GtkTable" id="table1">
+          <object class="GtkButton" id="simulate_button">
+            <property name="label" translatable="yes">Simulate ...</property>
             <property name="visible">True</property>
-            <property name="border_width">8</property>
-            <property name="n_rows">3</property>
-            <property name="n_columns">3</property>
-            <child>
-              <object class="GtkDrawingArea" id="drawing_area">
-                <property name="width_request">200</property>
-                <property name="height_request">200</property>
-                <property name="visible">True</property>
-                <property name="events">GDK_BUTTON_PRESS_MASK | GDK_STRUCTURE_MASK</property>
-                <signal name="expose_event" handler="on_drawing_area_expose_event"/>
-                <signal name="button_press_event" handler="on_drawing_area_button_press_event"/>
-              </object>
-              <packing>
-                <property name="right_attach">3</property>
-                <property name="bottom_attach">3</property>
-              </packing>
-            </child>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <property name="border_width">20</property>
+            <property name="use_action_appearance">False</property>
+            <signal name="clicked" handler="on_simulate_button_clicked" swapped="no"/>
           </object>
           <packing>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
             <property name="position">2</property>
           </packing>
         </child>
         <child>
-          <object class="GtkStatusbar" id="status_bar">
-            <property name="visible">True</property>
-            <property name="spacing">2</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="position">3</property>
-          </packing>
+          <placeholder/>
         </child>
       </object>
     </child>

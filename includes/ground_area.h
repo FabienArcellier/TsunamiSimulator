@@ -18,6 +18,11 @@ typedef GroundArea * PtrGroundArea;
 void ground_area_create (PtrGroundArea*, int width, int length);
 
 /*!
+ * \brief Initialise la carte avec des valeurs par defaut
+ */
+void ground_area_init_area (PtrGroundArea);
+
+/*!
  * \brief Destruit un objet Ground Area
  */
 void ground_area_destroy (PtrGroundArea*);

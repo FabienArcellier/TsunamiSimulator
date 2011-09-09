@@ -121,6 +121,16 @@ PtrEvent timeline_get_events (PtrTimeline timeline)
 }
 
 /*!
+ * \brief Assesseur de l'attribut event
+ */
+void timeline_set_events (PtrTimeline timeline, PtrEvent events)
+{
+	assert (timeline != NULL);
+	timeline -> events = events;
+}
+
+
+/*!
  * \brief Insere un event dans la timeline
  */
 void timeline_insert_event(PtrTimeline timeline, PtrEvent event)
@@ -131,20 +141,56 @@ void timeline_insert_event(PtrTimeline timeline, PtrEvent event)
 }
 
 /*!
+ * \brief Ajout un event en tete dans la timeline
+ */
+void timeline_push_event(PtrTimeline timeline, PtrEvent event)
+{
+	assert (timeline != NULL);
+	if (event != NULL)
+	{
+		PtrEvent current_event = timeline_get_events (timeline);
+		event_set_next_event (event, current_event);
+		timeline_set_events (timeline, event);
+	}
+}
+
+/*!
+ * \brief Retire un event dans la timeline
+ */
+PtrEvent timeline_pop_event(PtrTimeline timeline)
+{
+	assert (timeline != NULL);
+	PtrEvent event = timeline_get_events (timeline);
+	if (event != NULL)
+	{
+		PtrEvent next_event = event_get_next_event (event);
+		timeline_set_events (timeline, next_event);
+	}
+	
+	return event;
+}
+
+/*!
  * \brief Execute les events qui correspondent au temps courant de la timeline
  */
 void timeline_execute_events (PtrTimeline timeline)
 {
-	PtrEvent events = timeline_get_events (timeline);
 	int current_time = timeline_get_current_time (timeline);
-	
-	while (events != NULL && event_get_time (events) <= current_time)
+	PtrEvent event = NULL;
+	int execute_event = 0;
+	do
 	{
-		if (event_get_time (events) == current_time)
+		execute_event = 0;
+		event = timeline_pop_event (timeline);
+		if (event != NULL && event_get_time (event) == current_time)
 		{
-			events -> Execute (events);
+			event -> Execute (event);
+			event -> Destroy (&event);
+			execute_event = 1;
 		}
-		
-		events = event_get_next_event (events);
-	}
+		else
+		{
+			timeline_push_event (timeline, event);
+		}
+	} while (execute_event == 1);
 }

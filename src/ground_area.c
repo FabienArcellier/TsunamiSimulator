@@ -4,6 +4,7 @@
 #include "wave_signal.h"
 #include "ground.h"
 #include "ground_area.h"
+#include "ground_area_energy_map.h"
 
 /*!
  * \brief Cree un objet Ground Area qui contient un terrain (width en m, length en m)
@@ -37,10 +38,25 @@ void ground_area_create (PtrGroundArea *ground_area , int width, int length)
   }
   
   memset ((*ground_area) -> area, 0, sizeof (Ground) * size);
-  int i = 0, j = 0, k = 0;
+	ground_area_init_area (*ground_area);
+  
+}
+
+/*!
+ * \brief Initialise l'objet avec des valeurs par defaut
+ */
+void ground_area_init_area (PtrGroundArea ground_area)
+{
+	assert (ground_area != NULL);
+	
+	int i = 0, j = 0, k = 0;
+	int array_width = ground_area -> array_width;
+  int array_length = ground_area -> array_length;
+	int size = ground_area -> array_length * ground_area -> array_width;
+	
   for (i = 0; i < size; i++)
   {
-    PtrGround ground = &((*ground_area) -> area[i]);
+    PtrGround ground = &((ground_area -> area)[i]);
     ground_init (ground);
 		ground_set_position_X (ground, (i % array_width) * GROUND_WIDTH);
 		ground_set_position_Y (ground, (i / array_width) * GROUND_LENGTH);
@@ -55,9 +71,9 @@ void ground_area_create (PtrGroundArea *ground_area , int width, int length)
 			// Parcours les 10 cases autour d'une zone
 			// Pour chacune, sauf la centrale (k = 4), on recupere le
 			// voisin.
-			for (k = 0; k < 10; k++)
+			for (k = 0; k < 9; k++)
 			{
-				PtrGround ground = ground_area_get_ground ((*ground_area), i, j);
+				PtrGround ground = ground_area_get_ground (ground_area, i, j);
 				int array_position_x = (i - 1) + k % 3;
 				int array_position_y = (j - 1) + (int) k / 3;
 				
@@ -67,7 +83,7 @@ void ground_area_create (PtrGroundArea *ground_area , int width, int length)
 					array_position_x < array_width &&
 					array_position_y < array_length)
 				{
-					PtrGround ground_neighbour = ground_area_get_ground ((*ground_area), array_position_x, array_position_y);
+					PtrGround ground_neighbour = ground_area_get_ground (ground_area, array_position_x, array_position_y);
 					ground_insert_ground_neighbour (ground, ground_neighbour);
 				}
 			}

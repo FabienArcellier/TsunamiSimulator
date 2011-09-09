@@ -27,8 +27,8 @@ PtrGround ground_init (PtrGround ground)
   ground -> type = ground_type_water;
   ground -> width = 100;
   ground -> length = 100;
-  ground -> height = 0.0;
-  ground -> dawning = 0.99;
+  ground -> height = -3000.0;
+  ground -> dawning = 1.0;
   
   return ground;
 }

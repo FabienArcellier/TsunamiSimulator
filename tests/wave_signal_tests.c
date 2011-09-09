@@ -9,6 +9,7 @@ void wave_signal_set_get_length_test ();
 void wave_signal_set_get_direction_test ();
 void wave_signal_set_get_next_signal_wave_test();
 void wave_signal_insert_wave_signal_sort_by_length_asc_test ();
+void wave_signal_delete_wave_signal_test ();
 
 int main (void)
 {
@@ -18,6 +19,7 @@ int main (void)
 	wave_signal_set_get_direction_test ();
 	wave_signal_set_get_next_signal_wave_test ();
 	wave_signal_insert_wave_signal_sort_by_length_asc_test ();
+	wave_signal_delete_wave_signal_test ();
 	
 	return 0;
 }
@@ -131,4 +133,31 @@ void wave_signal_insert_wave_signal_sort_by_length_asc_test ()
 	TEST (wave_signal_get_next_wave_signal (list_wave_signals) == wave_signal1);
 	
 	wave_signal_destroy (&list_wave_signals);
+}
+
+/*!
+ * \brief teste la methode wave_signal_delete_wave_signal
+ */
+void wave_signal_delete_wave_signal_test ()
+{
+	TEST_TITLE ("wave_signal_delete_wave_signal_test");
+	
+	PtrWaveSignal wave_signal1 = NULL, wave_signal2 = NULL, wave_signal3 = NULL;
+	wave_signal_create (&wave_signal1);
+	wave_signal_set_length (wave_signal1, 150000);
+	wave_signal_create (&wave_signal2);
+	wave_signal_set_length (wave_signal2, 300000);
+	wave_signal_create (&wave_signal3);
+	wave_signal_set_length (wave_signal3, 10000);
+	
+	PtrWaveSignal list_wave_signals = NULL;
+	list_wave_signals = wave_signal_insert_wave_signal_sort_by_length_asc (list_wave_signals, wave_signal1);
+	list_wave_signals = wave_signal_insert_wave_signal_sort_by_length_asc (list_wave_signals, wave_signal2);
+	list_wave_signals = wave_signal_insert_wave_signal_sort_by_length_asc (list_wave_signals, wave_signal3);
+	
+	list_wave_signals = wave_signal_delete_wave_signal (list_wave_signals, wave_signal3);
+	TEST (list_wave_signals == wave_signal1);
+	
+	wave_signal_destroy (&list_wave_signals);
+	wave_signal_destroy (&wave_signal3);
 }

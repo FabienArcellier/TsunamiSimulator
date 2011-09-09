@@ -28,12 +28,9 @@ void ground_create_destroy_test ()
   PtrGround ground = NULL;
   ground_create (&ground);
   
-  TEST (ground -> height == 0.0);
-  
   ground_destroy (&ground);
   
   TEST (ground == NULL);
-  
 }
 
 /*!

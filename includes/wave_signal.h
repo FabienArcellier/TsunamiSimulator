@@ -52,6 +52,16 @@ void wave_signal_set_direction (PtrWaveSignal, double);
 double wave_signal_get_direction (PtrWaveSignal);
 
 /*!
+ * \brief Assesseur d'ecriture de la distance sur la case
+ */
+void wave_signal_set_distance (PtrWaveSignal, double);
+
+/*!
+ * \brief Assesseur de lecture de la distance sur la case
+ */
+double wave_signal_get_distance (PtrWaveSignal);
+
+/*!
  * \brief Assesseur d'ecriture de l'attribut next
  */
 void wave_signal_set_next_wave_signal (PtrWaveSignal, PtrWaveSignal);
@@ -67,3 +77,8 @@ PtrWaveSignal wave_signal_get_next_wave_signal (PtrWaveSignal);
  * Cette methode presuppose que la liste est deja ordonne par frequence croissante
  */
 PtrWaveSignal wave_signal_insert_wave_signal_sort_by_length_asc (PtrWaveSignal, PtrWaveSignal);
+
+/*!
+ * \brief Supprime un signal de la liste chainée
+ */
+PtrWaveSignal wave_signal_delete_wave_signal (PtrWaveSignal, PtrWaveSignal);

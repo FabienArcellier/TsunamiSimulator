@@ -49,6 +49,11 @@ int timeline_get_current_time (PtrTimeline);
 void timeline_move_current_time (PtrTimeline, int);
 
 /*!
+ * \brief Assesseur de l'attribut event
+ */
+void timeline_set_events (PtrTimeline timeline, PtrEvent events);
+
+/*!
  * \brief Retourne la file d'evenement de la timeline
  */
 PtrEvent timeline_get_events (PtrTimeline);
@@ -57,6 +62,16 @@ PtrEvent timeline_get_events (PtrTimeline);
  * \brief Insere un event dans la timeline
  */
 void timeline_insert_event(PtrTimeline, PtrEvent);
+
+/*!
+ * \brief Insere un event dans la timeline
+ */
+void timeline_push_event(PtrTimeline, PtrEvent);
+
+/*!
+ * \brief Insere un event dans la timeline
+ */
+PtrEvent timeline_pop_event(PtrTimeline);
 
 /*!
  * \brief Execute les events qui correspondent au temps courant de la timeline

@@ -1,6 +1,7 @@
 #include <assert.h>
 #include <stdlib.h>
 #include <string.h>
+#include "debug.h"
 #include "wave_signal.h"
 
 /*!
@@ -36,7 +37,8 @@ void wave_signal_destroy (PtrWaveSignal *wave_signal)
 void wave_signal_set_energy (PtrWaveSignal wave_signal, double energy)
 {
 	assert (wave_signal != NULL);
-	assert (energy >= 0);
+	DEBUG_IF ((energy >= -0.2) == 0, "%f", energy);
+	assert (energy >= -0.2);
 	
 	wave_signal -> energy = energy;
 }
@@ -96,6 +98,26 @@ double wave_signal_get_direction (PtrWaveSignal wave_signal)
 }
 
 /*!
+ * \brief Assesseur d'ecriture de la distance sur la case
+ */
+void wave_signal_set_distance (PtrWaveSignal wave_signal, double distance)
+{
+	assert (wave_signal != NULL);
+	assert (distance >= 0.0);
+	
+	wave_signal -> distance = distance;
+}
+
+/*!
+ * \brief Assesseur de lecture de la distance sur la case
+ */
+double wave_signal_get_distance (PtrWaveSignal wave_signal)
+{
+	assert (wave_signal != NULL);
+	return wave_signal -> distance;
+}
+
+/*!
  * \brief Assesseur d'ecriture de l'attribut next
  */
 void wave_signal_set_next_wave_signal (PtrWaveSignal wave_signal, PtrWaveSignal wave_signal_to_set)
@@ -128,7 +150,7 @@ PtrWaveSignal wave_signal_insert_wave_signal_sort_by_length_asc (PtrWaveSignal w
 	{
 		return wave_signal_to_insert;
 	}
-	else if (wave_signal_to_insert -> length < wave_signal -> length)
+	else if (wave_signal_to_insert -> length <= wave_signal -> length)
 	{
 		wave_signal_set_next_wave_signal (wave_signal_to_insert, wave_signal);
 		return wave_signal_to_insert;
@@ -140,6 +162,28 @@ PtrWaveSignal wave_signal_insert_wave_signal_sort_by_length_asc (PtrWaveSignal w
 			wave_signal_to_insert);
 		
 		wave_signal_set_next_wave_signal (wave_signal, wave_signal_result);
+		return wave_signal;
+	}
+}
+
+/*!
+ * \brief Supprime un signal de la liste chainée
+ */
+PtrWaveSignal wave_signal_delete_wave_signal (PtrWaveSignal wave_signal, PtrWaveSignal wave_signal_to_delete)
+{
+	assert (wave_signal_to_delete != NULL);
+	if (wave_signal == NULL)
+	{
+		return NULL;
+	}
+	else if (wave_signal == wave_signal_to_delete)
+	{
+		return wave_signal_get_next_wave_signal (wave_signal);
+	}
+	else
+	{
+		PtrWaveSignal new_next = wave_signal_delete_wave_signal (wave_signal_get_next_wave_signal (wave_signal), wave_signal_to_delete);
+		wave_signal_set_next_wave_signal (wave_signal, new_next);
 		return wave_signal;
 	}
 }
