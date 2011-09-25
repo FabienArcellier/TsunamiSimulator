@@ -6,6 +6,7 @@
 #include "ground.h"
 #include "ground_area.h"
 #include "ground_area_energy_map.h"
+#include "ground_area_energy_map_navigator.h"
 #include "event.h"
 #include "timeline.h"
 #include "simulation.h"
@@ -33,24 +34,6 @@ void simulation_create (PtrSimulation *simulation)
 void simulation_destroy (PtrSimulation *simulation)
 {
 	assert (*simulation != NULL);
-	
-	if ((*simulation) -> timeline != NULL)
-	{
-		PtrTimeline timeline = (*simulation) -> timeline;
-		timeline_destroy(&timeline);
-	}
-	
-	if ((*simulation) -> ground_area != NULL)
-	{
-		PtrGroundArea ground_area = (*simulation) -> ground_area;
-		ground_area_destroy (&ground_area);
-	}
-	
-	if ((*simulation) -> file_ground_area_energy_map != NULL)
-	{
-		PtrGroundAreaEnergyMap file_ground_area_energy_map = (*simulation) -> file_ground_area_energy_map;
-		ground_area_energy_map_destroy (&file_ground_area_energy_map);
-	}
 	
 	free (*simulation);
 	*simulation = NULL;
@@ -93,30 +76,20 @@ PtrGroundArea simulation_get_ground_area (PtrSimulation simulation)
 }
 
 /*!
- * \brief Assesseur en ecriture de file_ground_area_energy_map
+ * \brief Assesseur en ecriture de ground_area_energy_map_navigator
  */
-void simulation_set_push_energy_map (PtrSimulation simulation, PtrGroundAreaEnergyMap ground_area_energy_map)
+void simulation_set_energy_map_navigator (PtrSimulation simulation, 
+																					PtrGroundAreaEnergyMapNavigator ground_area_energy_map_navigator)
 {
 	assert (simulation != NULL);
-	assert (ground_area_energy_map != NULL);
-	ground_area_energy_map_push (&(simulation -> file_ground_area_energy_map), ground_area_energy_map);
+	simulation -> ground_area_energy_map_navigator = ground_area_energy_map_navigator;
 }
 
 /*!
- * \brief Assesseur en lecture de file_ground_area_energy_map
+ * \brief Assesseur en lecture de ground_area_energy_map_navigator
  */
-PtrGroundAreaEnergyMap simulation_set_pop_energy_map (PtrSimulation simulation)
+PtrGroundAreaEnergyMapNavigator simulation_get_energy_map_navigator (PtrSimulation simulation)
 {
 	assert (simulation != NULL);
-	assert (simulation -> file_ground_area_energy_map != NULL);
-	return ground_area_energy_map_pop (&(simulation -> file_ground_area_energy_map));
-}
-
-/*!
- * \brief Retourne 1 si l'energie map est vide
- */
-int simulation_energy_map_empty (PtrSimulation simulation)
-{
-	assert (simulation != NULL);
-	return ground_area_energy_map_empty (simulation -> file_ground_area_energy_map);
+	return simulation -> ground_area_energy_map_navigator;
 }

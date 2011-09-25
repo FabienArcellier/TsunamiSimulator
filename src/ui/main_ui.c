@@ -1,12 +1,19 @@
 #include <assert.h>
 #include <stdlib.h>
+#include <stdio.h>
 #include <string.h>
+#include "debug.h"
+#include "wave_signal.h"
+#include "ground.h"
+#include "ground_area.h"
+#include "ground_area_energy_map.h"
+#include "event.h"
+#include "timeline.h"
+#include "simulation.h"
 #include <gtk/gtk.h>
-#include "water_hmap.h"
-#include "water_simulation_engine.h"
-#include "water_rendering_engine.h"
-#include "point_water_transformation.h"
 #include "ui/main_ui.h"
+
+#include "ui/main_ui_private.h" // Gestion des events
 
 /*!
  * \brief Cree une instance MainUI
@@ -22,6 +29,32 @@ void main_ui_create (PtrMainUI *main_ui)
   }
   
   memset (*main_ui, 0, sizeof (MainUI));
+  
+  // Chargement de l'interface
+  GError* error = NULL;
+  GtkBuilder* builder = gtk_builder_new ();
+	if (!gtk_builder_add_from_file (builder, "ui/main.glade", &error))
+	{
+		g_warning ("Couldn't load builder file: %s", error->message);
+    g_error_free (error);
+	}
+	
+	// Chargement des objets
+	(*main_ui )-> window = GTK_WINDOW (gtk_builder_get_object (builder, "window"));
+	(*main_ui )-> configure_button = GTK_BUTTON (gtk_builder_get_object (builder, "configure_button"));
+	(*main_ui )-> calculate_button = GTK_BUTTON (gtk_builder_get_object (builder, "calculate_button"));
+	(*main_ui )-> simulate_button = GTK_BUTTON (gtk_builder_get_object (builder, "simulate_button"));
+	(*main_ui )-> new_menu = GTK_MENU_ITEM (gtk_builder_get_object (builder, "new_menu"));
+	(*main_ui )-> open_menu = GTK_MENU_ITEM (gtk_builder_get_object (builder, "open_menu"));
+	(*main_ui )-> save_menu = GTK_MENU_ITEM (gtk_builder_get_object (builder, "save_menu"));
+	(*main_ui )-> quit_menu = GTK_MENU_ITEM (gtk_builder_get_object (builder, "quit_menu"));
+	
+	(*main_ui ) -> ihm_active = 1;
+	
+	gtk_builder_connect_signals (builder, (*main_ui)); 
+	main_ui_refresh_ihm_states ((*main_ui ));
+	
+	assert ((*main_ui )-> window != NULL);
 }
 
 /*!
@@ -29,130 +62,163 @@ void main_ui_create (PtrMainUI *main_ui)
  */
 void main_ui_destroy (PtrMainUI *main_ui)
 {
-  assert (*main_ui != NULL);
+  assert (*main_ui != NULL );
   
   free (*main_ui);
   *main_ui = NULL;
 }
 
-void on_main_destroy (GtkWidget* window)
+/*!
+ * \brief Affiche la fenetre de l'IHM
+ */
+void main_ui_show (PtrMainUI main_ui)
 {
-  g_debug ("on_main_destroy triggs");
-}
-
-void on_menu_file_action_quit_activate (GtkMenuItem* menu_file_action_quit, PtrMainUI main_ui)
-{
-  g_debug ("on_menu_file_action_quit_activate triggs");
-  
-  gtk_widget_destroy(GTK_WIDGET (main_ui -> window));
-}
-
-gboolean on_drawing_area_button_press_event (GtkDrawingArea* drawing_area, GdkEventButton *event, PtrMainUI main_ui)
-{
-  //g_message ("on_drawing_area_button_press_event triggs button :%d", event -> button);
-  
-  if (event->button == 1)
-  {
-    PtrWaterSimulationEngine water_simulation_engine = main_ui -> water_simulation_engine;
-    PtrPointWaterTransformation point_water_transformation = NULL;
-    point_water_transformation_create (&point_water_transformation);
-    point_water_transformation_set_water_height (point_water_transformation, 100000000);
-    point_water_transformation_set_application_point (point_water_transformation, event -> x, event -> y);
-    point_water_transformation -> Apply (point_water_transformation, water_simulation_engine);
-    point_water_transformation_destroy (&point_water_transformation);
-    
-    return TRUE;
-  }
-  
-  return FALSE;
-}
-
-gboolean on_drawing_area_expose_event (GtkDrawingArea *drawing_area, GdkEventExpose *event, PtrMainUI main_ui)
-{
-  //g_message ("on_drawing_area_expose_event triggs");
-  
-  cairo_t *cr = NULL;
-  GdkPixbuf *frame = NULL;
-  
-  cr = gdk_cairo_create(event->window);
-  frame = water_rendering_engine_get_frame(main_ui -> water_rendering_engine);
-  gdk_cairo_set_source_pixbuf (cr, frame, 0, 0);
-  gdk_cairo_rectangle(cr, &event->area);
-  cairo_fill (cr);
-  
-  cairo_destroy (cr);
-  
-  return TRUE;
+	assert (main_ui != NULL);
+	assert (main_ui -> window != NULL);
+	
+	gtk_widget_show_all (GTK_WIDGET (main_ui -> window));
 }
 
 /*!
- * \brief Retourne la frame avant le rendu de l'eau
+ * \brief Cache la fenetre de l'IHM
  */
-GdkPixbuf* main_ui_get_frame_before_water_rendering (PtrMainUI main_ui)
+void main_ui_hide (PtrMainUI main_ui)
 {
-  assert (main_ui != NULL);
-  return main_ui -> frame_before_water_rendering;
+	assert (main_ui != NULL);
+	assert (main_ui -> window != NULL);
+	
+	gtk_widget_hide (GTK_WIDGET (main_ui -> window));
 }
 
 /*!
- * \brief Enregistre la frame avant le rendu de l'eau
+ * \brief Affecte à chaque widget les attributs qu'il doit avoir selon les etats de l'objet
  */
-void main_ui_set_frame_before_water_rendering (PtrMainUI main_ui, GdkPixbuf* frame)
+void main_ui_refresh_ihm_states (PtrMainUI main_ui)
 {
-  assert (main_ui != NULL);
-  main_ui -> frame_before_water_rendering = frame;
+	assert (main_ui != NULL);
+
+	gtk_widget_set_sensitive (GTK_WIDGET (main_ui -> configure_button), main_ui -> ihm_active && main_ui -> simulation_loaded);
+	gtk_widget_set_sensitive (GTK_WIDGET (main_ui -> calculate_button), main_ui -> ihm_active && main_ui -> simulation_loaded);
+	gtk_widget_set_sensitive (GTK_WIDGET (main_ui -> simulate_button), main_ui -> ihm_active && main_ui -> simulation_loaded);
+	
+	gtk_widget_set_sensitive (GTK_WIDGET (main_ui -> new_menu), main_ui -> ihm_active);
+	gtk_widget_set_sensitive (GTK_WIDGET (main_ui -> open_menu), main_ui -> ihm_active);
+	gtk_widget_set_sensitive (GTK_WIDGET (main_ui -> save_menu), main_ui -> ihm_active);
+	gtk_widget_set_sensitive (GTK_WIDGET (main_ui -> quit_menu), main_ui -> ihm_active);
 }
 
 /*!
- * \brief Retourne la frame a afficher
+ * \brief Assesseur en lecture de l'attribut window
  */
-GdkPixbuf* main_ui_get_frame_to_display (PtrMainUI main_ui)
+GtkWindow* main_ui_get_window (PtrMainUI main_ui)
 {
-  assert (main_ui != NULL);
-  return main_ui -> frame_to_display;
+	assert (main_ui != NULL);
+	
+	return (main_ui -> window);
 }
 
 /*!
- * \brief Permet d'enregistrer la frame a afficher
+ * \brief Assesseur en ecriture de l'attribut simulation_loaded
  */
-void main_ui_set_frame_to_display (PtrMainUI main_ui, GdkPixbuf* frame)
+void main_ui_set_simulation_loaded (PtrMainUI main_ui, int simulation_loaded)
 {
-  assert (main_ui != NULL);
-  main_ui -> frame_to_display = frame;
+	assert (main_ui != NULL);
+	assert (simulation_loaded == 0 || simulation_loaded == 1);
+	
+	main_ui -> simulation_loaded = simulation_loaded;
 }
 
 /*!
- * \brief Retourne le moteur de rendu de l'eau
+ * \brief Assesseur en lecture de l'attribut simulation_loaded
  */
-PtrWaterRenderingEngine main_ui_get_water_rendering_engine (PtrMainUI main_ui)
+int main_ui_get_simulation_loaded (PtrMainUI main_ui)
 {
-  assert (main_ui != NULL);
-  return main_ui -> water_rendering_engine;
+	return main_ui -> simulation_loaded;
 }
 
 /*!
- * \brief Set le moteur de rendu de l'eau
+ * \brief Assesseur en ecriture de l'attribut ihm_active
  */
-void main_ui_set_water_rendering_engine (PtrMainUI main_ui, PtrWaterRenderingEngine water_rendering_engine)
+void main_ui_set_ihm_active (PtrMainUI main_ui, int ihm_active)
 {
-  assert (main_ui != NULL);
-  main_ui -> water_rendering_engine = water_rendering_engine;
+	assert (main_ui != NULL);
+	assert (ihm_active == 0 || ihm_active == 1);
+	
+	main_ui -> ihm_active = ihm_active;
 }
 
 /*!
- * \brief Retourne le moteur de simulation
+ * \brief Assesseur en lecture de l'attribut ihm_active
  */
-PtrWaterSimulationEngine main_ui_get_water_simulation_engine (PtrMainUI main_ui)
+int main_ui_get_ihm_active (PtrMainUI main_ui)
 {
-  assert (main_ui != NULL);
-  return main_ui -> water_simulation_engine;
+	assert (main_ui != NULL);
+	return main_ui -> ihm_active;
 }
 
-/*!
- * \brief Set le moteur de simulation de l'eau
- */
-void main_ui_set_water_simulation_engine (PtrMainUI main_ui, PtrWaterSimulationEngine water_simulation_engine)
+void on_window_destroy_event (GtkWidget* widget, gpointer data)
 {
-  assert (main_ui != NULL);
-  main_ui -> water_simulation_engine = water_simulation_engine;
+	assert (data != NULL);
+	PtrMainUI main_ui = (PtrMainUI) data;
+	
+	g_debug ("on_window_destroy_event");
+}
+
+void on_configure_button_clicked (GtkWidget* widget, gpointer data)
+{
+	assert (data != NULL);
+	PtrMainUI main_ui = (PtrMainUI) data;
+	
+	g_debug ("on_configure_button_clicked");
+}
+
+void on_calculate_button_clicked (GtkWidget* widget, gpointer data)
+{
+	assert (data != NULL);
+	PtrMainUI main_ui = (PtrMainUI) data;
+	
+	g_debug ("on_calculate_button_clicked");
+}
+
+void on_simulate_button_clicked (GtkWidget* widget, gpointer data)
+{
+	assert (data != NULL);
+	PtrMainUI main_ui = (PtrMainUI) data;
+	
+	g_debug ("on_simulate_button_clicked");
+}
+
+void on_new_menu_activate (GtkWidget* widget, gpointer data)
+{
+	assert (data != NULL);
+	PtrMainUI main_ui = (PtrMainUI) data;
+	
+	g_debug ("on_new_menu_activate");
+}
+
+void on_open_menu_activate (GtkWidget* widget, gpointer data)
+{
+	assert (data != NULL);
+	PtrMainUI main_ui = (PtrMainUI) data;
+	
+	g_debug ("on_open_menu_activate");
+}
+
+void on_save_menu_activate (GtkWidget* widget, gpointer data)
+{
+	assert (data != NULL);
+	DEBUG_IF (1, "%p", data);
+	PtrMainUI main_ui = (PtrMainUI) data;
+	
+	g_debug ("on_save_menu_activate");
+}
+
+void on_quit_menu_activate (GtkWidget* widget, gpointer data)
+{
+	assert (data != NULL);
+	g_debug ("on_quit_menu_activate");
+	PtrMainUI main_ui = (PtrMainUI) data;
+	
+	GtkWindow* window = main_ui_get_window (main_ui);
+	gtk_widget_destroy (GTK_WIDGET (main_ui -> window));
 }

@@ -34,3 +34,9 @@ FILE* ground_area_energy_text_storage_get_file (PtrGroundAreaEnergyTextStorage);
  * \brief Ecrire le fichier ground_area_energy_text_storage
  */
 void ground_area_energy_text_storage_write_file (PtrGroundAreaEnergyTextStorage, PtrGroundAreaEnergyMap);
+
+/*!
+ * \brief Lit le fichier ground_area_energy_text_storage
+ */
+PtrGroundAreaEnergyMap ground_area_energy_text_storage_read_file (PtrGroundAreaEnergyTextStorage ground_area_energy_text_storage,
+																																	PtrGroundArea ground_area);

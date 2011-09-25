@@ -11,5 +11,8 @@
 ./ground_area_tests
 ./ground_area_text_storage_tests
 ./ground_area_energy_map_tests
+./ground_area_energy_map_navigator_tests
+./ground_area_energy_text_storage_tests
 ./propagation_timeline_processings_tests
 ./wave_propagation_event_tests
+./calculate_worker_tests

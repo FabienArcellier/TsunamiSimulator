@@ -93,11 +93,11 @@ GdkPixbuf* ground_area_energy_map_to_pixbuf (GdkPixbuf *picture, PtrGroundAreaEn
 	assert (ground_area_energy_map != NULL);
 	
 	// Constante
-	const double energy_max = 10000000000000000.0;
+	const double energy_max = 100000.0;
 	
 	const int red_min = 0;
 	const int red_max = 0;
-	const int green_min = 200;
+	const int green_min = 100;
 	const int green_max = 255;
 	const int blue_min = 0;
 	const int blue_max = 0;
@@ -117,6 +117,10 @@ GdkPixbuf* ground_area_energy_map_to_pixbuf (GdkPixbuf *picture, PtrGroundAreaEn
 			
 			if (energy != 0.0)
 			{
+				if (energy > energy_max)
+				{
+					energy = energy_max;
+				}
 				
 				int red = 0, green = 0, blue = 0;
 				red = red_max - (double)(energy_max - energy)/(double)(energy_max - 0) * (red_max - red_min);

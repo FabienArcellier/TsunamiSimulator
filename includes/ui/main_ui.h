@@ -5,18 +5,24 @@
 typedef struct main_ui
 {
   // Widgets
-  GtkWidget* window;
-  GtkDrawingArea* drawing_area;
-  GtkStatusbar* status_bar;
-  // Variables
-  GdkPixbuf* frame_before_water_rendering;
-  GdkPixbuf* frame_to_display;
-  // Objects
-  PtrWaterRenderingEngine water_rendering_engine;
-  PtrWaterSimulationEngine water_simulation_engine;
+  GtkWindow* window;
+  GtkButton* configure_button;
+  GtkButton* calculate_button;
+	GtkButton* simulate_button;
+	GtkMenuItem* new_menu;
+	GtkMenuItem* open_menu;
+	GtkMenuItem* save_menu;
+	GtkMenuItem* quit_menu;
+	//
+	// States
+	int simulation_loaded;
+	int ihm_active;
+	//
+	// Data
+	PtrSimulation simulation;
 } MainUI;
 
-typedef MainUI* PtrMainUI;
+typedef MainUI * PtrMainUI;
 
 /*!
  * \brief Cree une instance MainUI
@@ -28,53 +34,45 @@ void main_ui_create (PtrMainUI*);
  */
 void main_ui_destroy (PtrMainUI*);
 
-/*
- * Fonctions callback pour les signaux de la fenetre principale
+/*!
+ * \brief Affiche la fenetre de l'IHM
  */
-void on_main_destroy (GtkWidget*);
-void on_menu_file_action_quit_activate (GtkMenuItem* menu_file_action_quit, PtrMainUI main_ui);
-gboolean on_drawing_area_button_press_event (GtkDrawingArea* drawing_area, GdkEventButton *event, PtrMainUI main_ui);
-gboolean on_drawing_area_expose_event (GtkDrawingArea*, GdkEventExpose*, PtrMainUI);
-
-/* Assesseurs
- */ 
+void main_ui_show (PtrMainUI);
 
 /*!
- * \brief Retourne la frame avant le rendu de l'eau
+ * \brief Cache la fenetre de l'IHM
  */
-GdkPixbuf* main_ui_get_frame_before_water_rendering (PtrMainUI);
+void main_ui_hide (PtrMainUI);
 
 /*!
- * \brief Enregistre la frame avant le rendu de l'eau
+ * \brief Affecte à chaque widget les attributs qu'il doit avoir selon les etats de l'objet
  */
-void main_ui_set_frame_before_water_rendering (PtrMainUI, GdkPixbuf* frame);
+void main_ui_refresh_ihm_states (PtrMainUI);
 
 /*!
- * \brief Retourne la frame a afficher
+ * \brief Assesseur en lecture de l'attribut window
  */
-GdkPixbuf* main_ui_get_frame_to_display (PtrMainUI);
+GtkWindow* main_ui_get_window (PtrMainUI);
 
 /*!
- * \brief Permet d'enregistrer la frame a afficher
+ * \brief Assesseur en ecriture de l'attribut simulation_loaded
  */
-void main_ui_set_frame_to_display (PtrMainUI, GdkPixbuf* frame);
+void main_ui_set_simulation_loaded (PtrMainUI, int);
 
 /*!
- * \brief Retourne le moteur de rendu de l'eau
+ * \brief Assesseur en lecture de l'attribut simulation_loaded
  */
-PtrWaterRenderingEngine main_ui_get_water_rendering_engine (PtrMainUI);
+int main_ui_get_simulation_loaded (PtrMainUI);
 
 /*!
- * \brief Set le moteur de rendu de l'eau
+ * \brief Assesseur en ecriture de l'attribut ihm_active
  */
-void main_ui_set_water_rendering_engine (PtrMainUI, PtrWaterRenderingEngine);
+void main_ui_set_ihm_active (PtrMainUI, int);
 
 /*!
- * \brief Retourne le moteur de simulation
+ * \brief Assesseur en lecture de l'attribut ihm_active
  */
-PtrWaterSimulationEngine main_ui_get_water_simulation_engine (PtrMainUI);
+int main_ui_get_ihm_active (PtrMainUI);
 
-/*!
- * \brief Set le moteur de simulation de l'eau
- */
-void main_ui_set_water_simulation_engine (PtrMainUI, PtrWaterSimulationEngine);
+
+

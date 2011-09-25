@@ -85,6 +85,7 @@ void ground_area_energy_map_calculate (PtrGroundAreaEnergyMap ground_area_energy
 
 /*!
  * \brief Empile une instance de type PtrGroundAreaEnergyMap
+ * \deprecated
  */
 void ground_area_energy_map_push (PtrGroundAreaEnergyMap *ground_area_energy_map, PtrGroundAreaEnergyMap ground_area_energy_map_to_push)
 {
@@ -113,6 +114,7 @@ void ground_area_energy_map_push (PtrGroundAreaEnergyMap *ground_area_energy_map
 
 /*!
  * \brief Depile une instance de type PtrGroundAreaEnergyMap
+ * \deprecated
  */
 PtrGroundAreaEnergyMap ground_area_energy_map_pop (PtrGroundAreaEnergyMap *ground_area_energy_map)
 {
@@ -123,6 +125,53 @@ PtrGroundAreaEnergyMap ground_area_energy_map_pop (PtrGroundAreaEnergyMap *groun
 	energy_map_unstacked -> next = NULL;
 	
 	return energy_map_unstacked;
+}
+
+/*!
+ * \brief Definit la carte energetique suivante
+ */
+void ground_area_energy_map_set_next (PtrGroundAreaEnergyMap ground_area_energy_map, 
+																			PtrGroundAreaEnergyMap ground_area_energy_map_to_set)
+{
+	assert (ground_area_energy_map != NULL);
+
+	ground_area_energy_map -> next = ground_area_energy_map_to_set;
+	if (ground_area_energy_map_to_set != NULL)
+	{
+		ground_area_energy_map_to_set -> previous = ground_area_energy_map;
+	}
+}
+
+/*!
+ * \brief Obtient la carte energetique suivante
+ */
+PtrGroundAreaEnergyMap ground_area_energy_map_get_next (PtrGroundAreaEnergyMap ground_area_energy_map)
+{
+	assert (ground_area_energy_map != NULL);
+	
+	return ground_area_energy_map -> next;
+}
+
+/*!
+ * \brief Obtient la carte energetique precedente
+ */
+void ground_area_energy_map_set_previous (PtrGroundAreaEnergyMap ground_area_energy_map, 
+																					PtrGroundAreaEnergyMap ground_area_energy_map_to_set)
+{
+	assert (ground_area_energy_map != NULL);
+
+	ground_area_energy_map -> previous = ground_area_energy_map_to_set;
+	ground_area_energy_map_to_set -> next = ground_area_energy_map;
+}
+
+/*!
+ * \brief Obtient la carte energetique precedente
+ */
+PtrGroundAreaEnergyMap ground_area_energy_map_get_previous (PtrGroundAreaEnergyMap ground_area_energy_map)
+{
+	assert (ground_area_energy_map != NULL);
+	
+	return ground_area_energy_map -> previous;
 }
 
 /*!
@@ -164,4 +213,18 @@ double ground_area_energy_map_get_energy (PtrGroundAreaEnergyMap ground_area_ene
 	
 	int indice = positionX + positionY * ground_area_energy_map -> array_width;
 	return ground_area_energy_map -> map[indice];
+}
+
+/*!
+ * \brief Renvoie la quantite d'energie presente sur une case
+ */
+void ground_area_energy_map_set_energy (PtrGroundAreaEnergyMap ground_area_energy_map, int positionX, int positionY, double energy)
+{
+	assert (ground_area_energy_map != NULL);
+	assert (positionX < ground_area_energy_map -> array_width);
+	assert (positionY < ground_area_energy_map -> array_length);
+	assert (energy >= 0.0);
+	
+	int indice = positionX + positionY * ground_area_energy_map -> array_width;
+	ground_area_energy_map -> map[indice] = energy;
 }

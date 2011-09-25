@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "file.h"
 #include "wave_signal.h"
 #include "ground.h"
 #include "ground_area.h"
@@ -58,7 +59,7 @@ void ground_area_energy_text_storage_write_file (PtrGroundAreaEnergyTextStorage 
 	assert (ground_area_energy_text_storage_get_file (ground_area_energy_text_storage) != NULL);
 	
 	PtrGroundAreaEnergyMap energy_map = ground_area_energy_map;
-	PtrGroundAreaEnergyMap energy_map_recomposed = NULL;
+	assert (energy_map != NULL);
 	
 	FILE* file = ground_area_energy_text_storage_get_file (ground_area_energy_text_storage); 
 	
@@ -67,28 +68,82 @@ void ground_area_energy_text_storage_write_file (PtrGroundAreaEnergyTextStorage 
 						ground_area_energy_text_storage -> datatype, 
 						ground_area_energy_text_storage -> version);
 	
-	int time = 0;
-	while (ground_area_energy_map_empty (energy_map) == 0)
+	int array_width = energy_map -> array_width;
+	int array_length = energy_map -> array_length;
+	
+	int i = 0, j = 0;
+	
+	for (i = 0; i < array_width; i++)
 	{
-		PtrGroundAreaEnergyMap energy_map_to_serialize = ground_area_energy_map_pop (&energy_map);
-		fprintf (file, "Time\t%d\n", time);
-		int array_width = energy_map_to_serialize -> array_width;
-		int array_length = energy_map_to_serialize -> array_length;
-		
-		int i = 0, j = 0;
-		
-		for (i = 0; i < array_width; i++)
+		for (j = 0; j < array_length; j++)
 		{
-			for (j = 0; j < array_length; j++)
-			{
-				double energy = ground_area_energy_map_get_energy (energy_map_to_serialize, i, j);
-				fprintf (file, "%.1f\t", energy);
-			}
-			fprintf (file, "\n");
+			double energy = ground_area_energy_map_get_energy (energy_map, i, j);
+			fprintf (file, "%.1f\t", energy);
 		}
 		fprintf (file, "\n");
-		
-		time++;
-		ground_area_energy_map_push (&energy_map_recomposed, energy_map_to_serialize);
 	} 
+}
+
+/*!
+ * \brief Lit le fichier ground_area_energy_text_storage
+ */
+PtrGroundAreaEnergyMap ground_area_energy_text_storage_read_file (PtrGroundAreaEnergyTextStorage ground_area_energy_text_storage,
+																																	PtrGroundArea ground_area)
+{
+	assert (ground_area_energy_text_storage != NULL);
+	assert (ground_area != NULL);
+	
+	char datatype[32] = "";
+	char version[32] = "";
+	int operation_done = 0;
+	FILE *file = ground_area_energy_text_storage_get_file (ground_area_energy_text_storage);
+	long file_initial_position = ftell (file);
+	
+	jump_over_commentary_sharp (file);
+	operation_done = fscanf (
+		file,
+		"datatype\t%s\tversion\t%s\n",
+		datatype,
+		version
+	);
+	
+	if (operation_done != 2
+		|| strcmp(ground_area_energy_text_storage -> datatype, datatype) != 0
+		|| strcmp(ground_area_energy_text_storage -> version, version) != 0
+	)
+	{
+		fseek (file, file_initial_position, SEEK_SET);
+		return NULL;
+	}
+	
+	PtrGroundAreaEnergyMap ground_area_energy_map = NULL;
+	ground_area_energy_map_create (&ground_area_energy_map, ground_area);
+	
+	int array_width = ground_area_energy_map -> array_width;
+	int array_length = ground_area_energy_map -> array_length;
+	
+	int i = 0, j = 0;
+	
+	for (i = 0; i < array_width; i++)
+	{
+		for (j = 0; j < array_length; j++)
+		{
+			double energy = 0.0;
+			
+			jump_over_commentary_sharp (file);
+			operation_done = fscanf (file, "%lf\t", &energy);
+			
+			if (operation_done != 1)
+			{
+				fseek (file, file_initial_position, SEEK_SET);
+				return NULL;
+			}
+			
+			ground_area_energy_map_set_energy (ground_area_energy_map, i, j, energy);
+		}
+		
+		fscanf (file, "\n");
+	} 
+	
+	return ground_area_energy_map;
 }

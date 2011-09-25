@@ -8,6 +8,7 @@
 #include "ground_area.h"
 #include "ground_area_text_storage.h"
 #include "ground_area_energy_map.h"
+#include "ground_area_energy_map_navigator.h"
 #include "ground_area_energy_text_storage.h"
 #include "event.h"
 #include "earthquake_event.h"
@@ -153,13 +154,14 @@ void simulation_text_storage_write_file (PtrSimulationTextStorage simulation_tex
 		fprintf (file, "\n");
 	}
 	
+	/* TODO Implement the write file pour energy map navigator */
 	PtrGroundAreaEnergyTextStorage ground_area_energy_text_storage = simulation_text_storage -> ground_area_energy_text_storage;
 	if (ground_area_energy_text_storage != NULL)
 	{
 		fprintf (file, "[Energies]\n");
 		ground_area_energy_text_storage_set_file (ground_area_energy_text_storage, file);
-		PtrGroundAreaEnergyMap ground_area_energy_map = simulation -> file_ground_area_energy_map;
-		ground_area_energy_text_storage_write_file (ground_area_energy_text_storage, ground_area_energy_map);
+		// PtrGroundAreaEnergyMap ground_area_energy_map = simulation -> file_ground_area_energy_map;
+		// ground_area_energy_text_storage_write_file (ground_area_energy_text_storage, ground_area_energy_map);
 	}
 }
 
@@ -228,6 +230,25 @@ PtrSimulation simulation_text_storage_read_file (PtrSimulationTextStorage simula
 	PtrEvent event = earthquake_events_text_storage_read_file (earthquake_events_text_storage, ground_area);
 	timeline_set_events (timeline, event);
 	simulation_set_timeline (simulation, timeline);
+	
+	// Partie Optionnel
+	PtrGroundAreaEnergyMapNavigator energy_map_navigator = NULL;
+	
+	char energies_text[32];
+	fgets (energies_text, 32, file);
+	if (strcmp (energies_text, "[Energies]\n") == 0)
+	{
+		/*PtrGroundAreaEnergyTextStorage ground_area_energy_text_storage = NULL;
+		PtrGroundAreaEnergyMap ground_area_energy_map = NULL;
+		ground_area_energy_text_storage_create (&ground_area_energy_text_storage);
+		ground_area_energy_text_storage_set_file (ground_area_energy_text_storage, file);*/
+	}
+	else
+	{
+		ground_area_energy_map_navigator_create (&energy_map_navigator);
+	}
+	
+	simulation_set_energy_map_navigator (simulation, energy_map_navigator);
 	
 	return simulation;
 }

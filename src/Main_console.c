@@ -1,3 +1,4 @@
+#include<assert.h>
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
@@ -8,6 +9,7 @@
 #include "ground_area.h"
 #include "ground_area_text_storage.h"
 #include "ground_area_energy_map.h"
+#include "ground_area_energy_map_navigator.h"
 #include "ground_area_energy_text_storage.h"
 #include "event.h"
 #include "earthquake_event.h"
@@ -131,6 +133,7 @@ void CalculerSimu (PtrSimulation simulation)
 {
 	PtrTimeline timeline = simulation_get_timeline (simulation);
 	PtrGroundArea ground_area = simulation_get_ground_area (simulation);
+	PtrGroundAreaEnergyMapNavigator ground_area_energy_map_navigator = simulation_get_energy_map_navigator (simulation);
 	
 	int final_time = timeline_get_final_time (timeline);
 	int i = 0;
@@ -146,7 +149,7 @@ void CalculerSimu (PtrSimulation simulation)
 		ground_area_energy_map_create (&ground_area_energy_map, ground_area);
 		timeline_move_current_time (timeline, 1);
 		
-		simulation_set_push_energy_map (simulation, ground_area_energy_map);
+		ground_area_energy_map_navigator_add (ground_area_energy_map_navigator, ground_area_energy_map);
 		i++;
 	}
 
@@ -161,32 +164,37 @@ void SaveImage (PtrSimulation simulation)
 	scanf ("%s", prefix);
 	
 	PtrGroundArea ground_area = simulation_get_ground_area (simulation);
-	PtrGroundAreaEnergyMap ground_area_energy_map_initial = simulation_set_pop_energy_map (simulation);
-	PtrGroundAreaEnergyMap ground_area_energy_map = ground_area_energy_map_initial;
+	PtrGroundAreaEnergyMapNavigator ground_area_energy_map_navigator = simulation_get_energy_map_navigator (simulation);
+	
+	assert (ground_area != NULL);
+	assert (ground_area_energy_map_navigator != NULL);
+	
+	ground_area_energy_map_navigator_move_position (ground_area_energy_map_navigator, 0);
+	int count_energy_map = ground_area_energy_map_navigator_get_count (ground_area_energy_map_navigator);
 	
 	int i = 0;
-	while (ground_area_energy_map_initial != ground_area_energy_map || i == 0)
+	for (i = 0; i < count_energy_map; i++)
 	{
 		char filename[255];
 		sprintf (filename, "%s_%d.png", prefix, i);
 		
 		
 		GdkPixbuf* picture = ground_area_to_pixbuf (ground_area);
+		PtrGroundAreaEnergyMap ground_area_energy_map = ground_area_energy_map_navigator_get_current (ground_area_energy_map_navigator);
 		picture = ground_area_energy_map_to_pixbuf (picture, ground_area_energy_map);
 		gdk_pixbuf_save (picture, filename, "png", NULL, NULL);
 		
-		simulation_set_push_energy_map (simulation, ground_area_energy_map);
-		ground_area_energy_map = simulation_set_pop_energy_map (simulation);
-		
-		i++;
+		ground_area_energy_map_navigator_move_next (ground_area_energy_map_navigator);
 	}
+	
+	ground_area_energy_map_navigator_move_position (ground_area_energy_map_navigator, 0);
 	
 	printf("Images sauvegardee.\n");
 }
 
 void PrintReport (PtrSimulation simulation)
 {
-	printf ("Entrez le nom du fichier report :\n");
+	/*printf ("Entrez le nom du fichier report :\n");
 	char prefix[250];
 	scanf ("%s", prefix);
 	
@@ -205,5 +213,5 @@ void PrintReport (PtrSimulation simulation)
 	else
 	{
 		fprintf (stderr, "PrintReport, impossible d'ouvrir %s.\n", filename);
-	}
+	}*/
 }
