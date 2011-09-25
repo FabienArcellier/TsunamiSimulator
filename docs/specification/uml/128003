@@ -1,6 +1,6 @@
 format 76
 "Project" // Project
-  revision 1
+  revision 8
   modified_by 3 "Fabien_2"
   // class settings
   //class diagram settings
@@ -33,203 +33,478 @@ format 76
     componentdiagram 128131 "Planning"
       package_name_in_tab default show_context default auto_label_position default draw_all_relations no shadow default
       draw_component_as_icon default show_component_req_prov default show_component_rea default show_stereotype_properties default
+      comment "Redacteur : FAR"
       size A0
     end
 
     component 128003 "Livraison"
-    end
-
-    component 128131 "IHM generation du terrain"
-      simplerelation 129283
-	-_->
-	  on component_ref 129283 // IHM general
-      end
-    end
-
-    component 128259 "Validation"
-      simplerelation 128003
-	-_->
-	  on component_ref 128003 // Livraison
-      end
-    end
-
-    component 128387 "Packaging"
-      simplerelation 128131
+      simplerelation 138371
 	-_->
 	  on component_ref 128259 // Validation
       end
     end
 
-    component 128515 "Programmation de generation du terrain"
-      simplerelation 128515
+    component 128131 "Implementation IHM Generation du terrain"
+      simplerelation 139139
+	-_->
+	  on component_ref 129667 // Implementation SimulatePicture
+      end
+
+      simplerelation 140803
 	-_->
 	  on component_ref 128643 // Validation de génération du terrain
+      end
+
+      simplerelation 140931
+	-_->
+	  on component_ref 129027 // Fichier glade IHM Generation du Terrain
+      end
+    end
+
+    component 128259 "Validation"
+      simplerelation 138499
+	-_->
+	  on component_ref 128387 // Packaging
+      end
+    end
+
+    component 128387 "Packaging"
+      comment "Livrable :
+- build/makefile
+
+Target :
+- PackageTests
+- PackageProduction : NDEBUG=1 (Desactivation des assert)
+
+Le package :
+- Root
+	- main (Logiciel)
+	- UI (Dossier)
+		- main.glade
+	- Docs
+		INSTALL
+		user_manuel.pdf
+"
+      simplerelation 138627
+	-_->
+	  on component_ref 129283 // Architecture IHM general
+      end
+
+      simplerelation 142851
+	-_->
+	  on component_ref 137859 // Main
+      end
+
+      simplerelation 149891
+	-_->
+	  on component_ref 144515 // GroundGenerator
+      end
+    end
+
+    component 128515 "Programmation de generation du terrain"
+      comment "Redacteur : CHE
+
+Attendus :
+- templates pour chaque fichier à compléter
+
+Livrables :
+- src/ground_area_builder.c
+- includes/ground_area_builder.h
+- tests/ground_area_builder_tests.c"
+      simplerelation 141187
+	-_->
+	  on component_ref 128771 // Architecture de generation du terrain
       end
     end
 
     component 128643 "Validation de génération du terrain"
-      simplerelation 128387
-	-_->
-	  on component_ref 128131 // IHM generation du terrain
-      end
-    end
-
-    component 128771 "Architecture de generation du terrain"
-      simplerelation 128643
+      simplerelation 141059
 	-_->
 	  on component_ref 128515 // Programmation de generation du terrain
       end
     end
 
+    component 128771 "Architecture de generation du terrain"
+      associated_diagram componentdiagram_ref 128131 // Planning
+      comment "Redacteur : FAR
+
+Livrables :
+- UML : Composants/Generation du terrain/ground_area_builder"
+      simplerelation 141315
+	-_->
+	  on component_ref 129539 // Modele de donnee terrain
+      end
+
+      simplerelation 141827
+	-_->
+	  on component_ref 128899 // Besoin de generation du terrain
+      end
+    end
+
     component 128899 "Besoin de generation du terrain"
+      comment "Redacteur : FAR
+
+Livrables :
+- docs/specifications/GenerationTerrain.odt"
       simplerelation 128771
 	-_->
 	  on component_ref 128771 // Architecture de generation du terrain
-      end
-
-      simplerelation 129155
-	-_->
-	  on component_ref 129155 // Maquette IHM sur Inkscape
       end
 
       simplerelation 129667
 	-_->
 	  on component_ref 129539 // Modele de donnee terrain
       end
-    end
 
-    component 129027 "Creation fichier IHM sur glade"
-      simplerelation 128899
+      simplerelation 150019
 	-_->
-	  on component_ref 128131 // IHM generation du terrain
+	  on component_ref 129539 // Modele de donnee terrain
       end
     end
 
-    component 129155 "Maquette IHM sur Inkscape"
-      simplerelation 129027
+    component 129027 "Fichier glade IHM Generation du Terrain"
+      simplerelation 141699
 	-_->
-	  on component_ref 129027 // Creation fichier IHM sur glade
+	  on component_ref 129155 // Maquette IHM Generation du terrain
       end
     end
 
-    component 129283 "IHM general"
-      simplerelation 129411
+    component 129155 "Maquette IHM Generation du terrain"
+      simplerelation 141571
 	-_->
-	  on component_ref 128387 // Packaging
+	  on component_ref 128899 // Besoin de generation du terrain
       end
     end
 
-    component 129411 "IHM configuration seisme"
-      simplerelation 129539
+    component 129283 "Architecture IHM general"
+      associated_diagram componentdiagram_ref 128131 // Planning
+      comment "Redacteur : FAR
+
+Livrable :
+- includes/main_ui.h
+- includes/main_ui_private.h
+- Composants/MainUI/main_ui
+
+A completer :
+- Integration CalculateUI
+- Integration SimulateUI
+- Integration ConfigUI"
+      simplerelation 138755
 	-_->
-	  on component_ref 129283 // IHM general
+	  on component_ref 130435 // Implementation d'IHM Simulate
+      end
+
+      simplerelation 138883
+	-_->
+	  on component_ref 129411 // Implementation IHM configure
+      end
+
+      simplerelation 139651
+	-_->
+	  on component_ref 130307 // Implementation d'IHM calculate
+      end
+
+      simplerelation 142723
+	-_->
+	  on component_ref 137731 // Fichier glade IHM generale
+      end
+    end
+
+    component 129411 "Implementation IHM configure"
+      simplerelation 139267
+	-_->
+	  on component_ref 129667 // Implementation SimulatePicture
+      end
+
+      simplerelation 139395
+	-_->
+	  on component_ref 129923 // Maquette IHM configuration seisme
+      end
+
+      simplerelation 139523
+	-_->
+	  on component_ref 130179 // Composant d'enregistrement Seisme
       end
     end
 
     component 129539 "Modele de donnee terrain"
-      simplerelation 129795
-	-_->
-	  on component_ref 128771 // Architecture de generation du terrain
-      end
+      comment "Redacteur : FAR
 
+Livrables :
+- src/ground.c
+- src/ground_area.c
+- includes/ground.h
+- includes/ground_area.h
+- tests/ground_tests.c
+- tests/ground_area_tests.c"
       simplerelation 129923
 	-_->
-	  on component_ref 129667 // Visualisation Terrain
+	  on component_ref 129667 // Implementation SimulatePicture
       end
 
       simplerelation 130307
 	-_->
-	  on component_ref 129795 // Specification Visualisation terrain
-      end
-
-      simplerelation 130819
-	-_->
-	  on component_ref 130179 // Composant d'enregistrement Seisme
+	  on component_ref 129795 // Architecture SimulatePicture
       end
 
       simplerelation 131843
 	-_->
-	  on component_ref 130819 // Module de calcul
+	  on component_ref 130819 // Implementation de CalculateWorker
       end
     end
 
-    component 129667 "Visualisation Terrain"
-      simplerelation 130051
+    component 129667 "Implementation SimulatePicture"
+      simplerelation 140547
 	-_->
-	  on component_ref 128131 // IHM generation du terrain
-      end
-
-      simplerelation 130179
-	-_->
-	  on component_ref 129411 // IHM configuration seisme
-      end
-
-      simplerelation 131203
-	-_->
-	  on component_ref 130307 // IHM calculation
+	  on component_ref 129795 // Architecture SimulatePicture
       end
     end
 
-    component 129795 "Specification Visualisation terrain"
-      simplerelation 130435
+    component 129795 "Architecture SimulatePicture"
+      comment "Redacteur : FAR
+
+Livrables :
+- docs/specification/SimulatePicture.odt"
+      simplerelation 140419
 	-_->
-	  on component_ref 129667 // Visualisation Terrain
+	  on component_ref 129539 // Modele de donnee terrain
       end
     end
 
     component 129923 "Maquette IHM configuration seisme"
-      simplerelation 130563
+      simplerelation 140163
 	-_->
-	  on component_ref 129411 // IHM configuration seisme
+	  on component_ref 130051 // Besoin de configuration seisme
       end
     end
 
     component 130051 "Besoin de configuration seisme"
-      simplerelation 130691
-	-_->
-	  on component_ref 129923 // Maquette IHM configuration seisme
-      end
     end
 
     component 130179 "Composant d'enregistrement Seisme"
-      simplerelation 130947
+      simplerelation 140291
 	-_->
-	  on component_ref 129411 // IHM configuration seisme
+	  on component_ref 129539 // Modele de donnee terrain
       end
     end
 
-    component 130307 "IHM calculation"
+    component 130307 "Implementation d'IHM calculate"
+      comment "Redacteur : FAR
+
+Livrables :
+- src/ui/calculate_ui.c
+- Integration dans build/makefile"
       simplerelation 131075
 	-_->
-	  on component_ref 130307 // IHM calculation
+	  on component_ref 130307 // Implementation d'IHM calculate
+      end
+
+      simplerelation 139779
+	-_->
+	  on component_ref 130819 // Implementation de CalculateWorker
+      end
+
+      simplerelation 141955
+	-_->
+	  on component_ref 137347 // Fichier glade pour IHM calculate
       end
     end
 
-    component 130435 "IHM visualisation"
-      simplerelation 131587
+    component 130435 "Implementation d'IHM Simulate"
+      simplerelation 139907
 	-_->
-	  on component_ref 129283 // IHM general
+	  on component_ref 130691 // Architecture d'IHM Simulate
+      end
+
+      simplerelation 150531
+	-_->
+	  on component_ref 144643 // Fichier glade pour IHM Simulate
       end
     end
 
-    component 130563 "Besoin de visualisation"
-      simplerelation 131331
+    component 130563 "Besoin de Simulate"
+      comment "Redacteur : FAR
+
+Livrables :
+- docs/specifications/simulate.odt"
+    end
+
+    component 130691 "Architecture d'IHM Simulate"
+      comment "Redacteur : FAR
+
+Livrables :
+- Composants/SimulateUI/simulate_ui
+- includes/ui/simulate_ui.h"
+      simplerelation 140035
 	-_->
-	  on component_ref 130691 // Architecture de visualisation
+	  on component_ref 130563 // Besoin de Simulate
+      end
+
+      simplerelation 150275
+	-_->
+	  on component_ref 129667 // Implementation SimulatePicture
+      end
+
+      simplerelation 150787
+	-_->
+	  on component_ref 144771 // Maquette IHM Simulate
+      end
+
+      simplerelation 157571
+	-_->
+	  on component_ref 151299 // Architecture de GroundAreaEnergyMapNavigator
       end
     end
 
-    component 130691 "Architecture de visualisation"
-      simplerelation 131459
+    component 130819 "Implementation de CalculateWorker"
+      comment "Redacteur : FAR
+
+Livrables :
+- src/calculate_worker.c
+- tests/calculate_worker_tests.c
+- Integration dans build/makefile
+- Integration du test dans build/tests.sh"
+      simplerelation 142083
 	-_->
-	  on component_ref 130435 // IHM visualisation
+	  on component_ref 137475 // Architecture du module Calculate
       end
     end
 
-    component 130819 "Module de calcul"
-      simplerelation 131715
+    component 137347 "Fichier glade pour IHM calculate"
+      comment "Redacteur : FAR
+
+Livrables :
+- src/ui/calculate.glade
+- build/makefile
+	- Ajout de la copie a la target copy_ui
+
+"
+      simplerelation 142211
 	-_->
-	  on component_ref 130307 // IHM calculation
+	  on component_ref 137475 // Architecture du module Calculate
+      end
+    end
+
+    component 137475 "Architecture du module Calculate"
+      comment "Redacteur : FAR
+
+Livrables :
+- Composants/Calculate/CalculateWorker
+- Composants/Calculate/CalculateUI
+- includes/calculate_worker.h
+- includes/calculate_worker_private.h
+- includes/ui/calculate_ui.h
+- includes/ui/calculate_ui_private.h
+"
+      simplerelation 142339
+	-_->
+	  on component_ref 129539 // Modele de donnee terrain
+      end
+
+      simplerelation 157315
+	-_->
+	  on component_ref 151299 // Architecture de GroundAreaEnergyMapNavigator
+      end
+    end
+
+    component 137603 "Maquette IHM generale"
+      comment "Redacteur : FAR
+
+Livrables :
+- docs/maquettes/ihm_generale.svg"
+    end
+
+    component 137731 "Fichier glade IHM generale"
+      comment "Redacteur : FAR
+
+Livrables :
+- src/ui/main.glade"
+      simplerelation 142595
+	-_->
+	  on component_ref 137603 // Maquette IHM generale
+      end
+    end
+
+    component 137859 "Main"
+      comment "Redacteur : FAR
+
+Livrable :
+- src/main.c
+- includes/main.h
+- tests/main_tests.c"
+      simplerelation 149507
+	-_->
+	  on component_ref 144387 // Implementation IHM generale
+      end
+    end
+
+    component 144387 "Implementation IHM generale"
+      comment "Redacteur : FAR
+
+Livrable :
+- src/ui/main_ui.c
+- includes/ui/main_ui.h
+- includes/ui/main_ui_private.h"
+      simplerelation 149635
+	-_->
+	  on component_ref 129283 // Architecture IHM general
+      end
+    end
+
+    component 144515 "GroundGenerator"
+      simplerelation 149763
+	-_->
+	  on component_ref 128131 // Implementation IHM Generation du terrain
+      end
+    end
+
+    component 144643 "Fichier glade pour IHM Simulate"
+      comment "Redacteur : FAR
+
+Livrables :
+- src/ui/simulate.glade
+	- Ajout de la copie a la target copy_ui
+"
+      simplerelation 150403
+	-_->
+	  on component_ref 130691 // Architecture d'IHM Simulate
+      end
+    end
+
+    component 144771 "Maquette IHM Simulate"
+      comment "Redacteur : FAR
+
+Livrables :
+- docs/specifications/maquette_simulate.svg"
+      simplerelation 150659
+	-_->
+	  on component_ref 130563 // Besoin de Simulate
+      end
+    end
+
+    component 151299 "Architecture de GroundAreaEnergyMapNavigator"
+      comment "Redacteur : FAR
+
+Livrables :
+- Composants/Ground/GroundAreaEnergyMapNavigator
+- includes/ground_area_energy_map_navigator.h"
+      simplerelation 157699
+	-_->
+	  on component_ref 129539 // Modele de donnee terrain
+      end
+    end
+
+    component 151427 "Implementation de GroundAreaEnergyMapNavigator"
+      comment "Redacteur : FAR
+
+Livrables :
+- src/ground_area_energy_map_navigator.c
+- tests/ground_area_energy_map_navigator_tests.c
+- Integration dans build/makefile
+- Integration du test dans build/tests.sh"
+      simplerelation 157443
+	-_->
+	  on component_ref 151299 // Architecture de GroundAreaEnergyMapNavigator
       end
     end
   end

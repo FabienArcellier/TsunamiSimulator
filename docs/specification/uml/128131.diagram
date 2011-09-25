@@ -2,176 +2,276 @@ format 76
 
 componentcanvas 128003 component_ref 128003 // Livraison
   draw_component_as_icon default show_component_req_prov default show_component_rea default show_stereotype_properties default
-  xyzwh 2425.1 616.6 2000 143 51
+  xyzwh 3144.7 798.6 2000 143 51
 end
-componentcanvas 128131 component_ref 128131 // IHM generation du terrain
+componentcanvas 128131 component_ref 128131 // Implementation IHM Generation du terrain
   draw_component_as_icon default show_component_req_prov default show_component_rea default show_stereotype_properties default
-  xyzwh 1607.6 765.9 2000 153 51
+  xyzwh 1547.5 945.9 2000 243 51
 end
 componentcanvas 128259 component_ref 128259 // Validation
   draw_component_as_icon default show_component_req_prov default show_component_rea default show_stereotype_properties default
-  xyzwh 2261.7 619.1 2000 143 51
+  xyzwh 2952.7 800.1 2000 143 51
 end
 componentcanvas 128387 component_ref 128387 // Packaging
   draw_component_as_icon default show_component_req_prov default show_component_rea default show_stereotype_properties default
-  xyzwh 2039.3 617.7 2005 143 51
+  xyzwh 2754 800.7 2005 143 51
 end
 componentcanvas 128899 component_ref 128515 // Programmation de generation du terrain
   draw_component_as_icon default show_component_req_prov default show_component_rea default show_stereotype_properties default
-  xyzwh 969.1 650 2000 235 51
+  xyzwh 958 830 2000 235 51
 end
 componentcanvas 129027 component_ref 128643 // Validation de génération du terrain
   draw_component_as_icon default show_component_req_prov default show_component_rea default show_stereotype_properties default
-  xyzwh 1231.7 653.5 2000 203 51
+  xyzwh 1219.5 833.7 2000 203 51
 end
 componentcanvas 129411 component_ref 128771 // Architecture de generation du terrain
   draw_component_as_icon default show_component_req_prov default show_component_rea default show_stereotype_properties default
-  xyzwh 707.1 655.7 2000 219 51
+  color lightmediumblue xyzwh 694 835.8 2000 219 51
 end
 componentcanvas 129667 component_ref 128899 // Besoin de generation du terrain
-  draw_component_as_icon default show_component_req_prov default show_component_rea default show_stereotype_properties default
-  xyzwh 477.3 656.6 2000 187 51
+  draw_component_as_icon no show_component_req_prov default show_component_rea default show_stereotype_properties default
+  color lightmediumblue xyzwh 464.3 838 2000 199 51
 end
-componentcanvas 129923 component_ref 129027 // Creation fichier IHM sur glade
+componentcanvas 129923 component_ref 129027 // Fichier glade IHM Generation du Terrain
   draw_component_as_icon default show_component_req_prov default show_component_rea default show_stereotype_properties default
-  xyzwh 970 830 2000 175 51
+  xyzwh 956.7 1010 2000 229 51
 end
-componentcanvas 130179 component_ref 129155 // Maquette IHM sur Inkscape
+componentcanvas 130179 component_ref 129155 // Maquette IHM Generation du terrain
   draw_component_as_icon default show_component_req_prov default show_component_rea default show_stereotype_properties default
-  xyzwh 709.3 830.2 2000 163 51
+  xyzwh 699.5 1010.2 2000 209 51
 end
-componentcanvas 130947 component_ref 129283 // IHM general
+componentcanvas 130947 component_ref 129283 // Architecture IHM general
   draw_component_as_icon default show_component_req_prov default show_component_rea default show_stereotype_properties default
-  xyzwh 1868.4 617.7 2000 143 51
+  color lightmediumblue xyzwh 2109.4 808.1 2000 149 51
 end
-componentcanvas 131331 component_ref 129411 // IHM configuration seisme
+componentcanvas 131331 component_ref 129411 // Implementation IHM configure
   draw_component_as_icon default show_component_req_prov default show_component_rea default show_stereotype_properties default
-  xyzwh 1559.6 366.9 2000 153 51
+  xyzwh 1496.3 543.2 2000 179 51
 end
 componentcanvas 131587 component_ref 129539 // Modele de donnee terrain
   draw_component_as_icon default show_component_req_prov default show_component_rea default show_stereotype_properties default
-  xyzwh 582.2 505.9 2000 155 51
+  color lightmediumblue xyzwh 242.8 525.9 2000 155 51
 end
-componentcanvas 131971 component_ref 129667 // Visualisation Terrain
+componentcanvas 131971 component_ref 129667 // Implementation SimulatePicture
   draw_component_as_icon default show_component_req_prov default show_component_rea default show_stereotype_properties default
-  xyzwh 1326 519.1 2000 143 51
+  xyzwh 1299 685 2000 189 51
 end
-componentcanvas 132483 component_ref 129795 // Specification Visualisation terrain
+componentcanvas 132483 component_ref 129795 // Architecture SimulatePicture
   draw_component_as_icon default show_component_req_prov default show_component_rea default show_stereotype_properties default
-  xyzwh 936.7 513.5 2000 197 51
+  xyzwh 902.4 685.5 2000 197 51
 end
 componentcanvas 132867 component_ref 129923 // Maquette IHM configuration seisme
   draw_component_as_icon default show_component_req_prov default show_component_rea default show_stereotype_properties default
-  xyzwh 1081 369 2000 209 51
+  xyzwh 1069 585 2000 209 51
 end
 componentcanvas 133123 component_ref 130051 // Besoin de configuration seisme
   draw_component_as_icon default show_component_req_prov default show_component_rea default show_stereotype_properties default
-  xyzwh 473 369 2000 189 51
+  xyzwh 756.6 586 2000 189 51
 end
 componentcanvas 133379 component_ref 130179 // Composant d'enregistrement Seisme
   draw_component_as_icon default show_component_req_prov default show_component_rea default show_stereotype_properties default
-  xyzwh 1070 241 2000 223 51
+  xyzwh 1054.7 480 2000 223 51
 end
-componentcanvas 133763 component_ref 130307 // IHM calculation
+componentcanvas 133763 component_ref 130307 // Implementation d'IHM calculate
   draw_component_as_icon default show_component_req_prov default show_component_rea default show_stereotype_properties default
-  xyzwh 1412 154 2000 143 51
+  xyzwh 1621 358.9 2000 193 51
 end
-componentcanvas 133891 component_ref 130435 // IHM visualisation
+componentcanvas 133891 component_ref 130435 // Implementation d'IHM Simulate
   draw_component_as_icon default show_component_req_prov default show_component_rea default show_stereotype_properties default
-  xyzwh 1562 48 2000 143 51
+  xyzwh 1884.4 75 2000 205 51
 end
-componentcanvas 134659 component_ref 130563 // Besoin de visualisation
+componentcanvas 134659 component_ref 130563 // Besoin de Simulate
   draw_component_as_icon default show_component_req_prov default show_component_rea default show_stereotype_properties default
-  xyzwh 475 38 2000 143 51
+  color lightmediumblue xyzwh 839.4 72.2 2000 143 51
 end
-componentcanvas 134787 component_ref 130691 // Architecture de visualisation
+componentcanvas 134787 component_ref 130691 // Architecture d'IHM Simulate
   draw_component_as_icon default show_component_req_prov default show_component_rea default show_stereotype_properties default
-  xyzwh 938 42 2000 171 51
+  xyzwh 1282.4 32.2 2000 187 51
 end
-componentcanvas 135427 component_ref 130819 // Module de calcul
+componentcanvas 135427 component_ref 130819 // Implementation de CalculateWorker
   draw_component_as_icon default show_component_req_prov default show_component_rea default show_stereotype_properties default
-  xyzwh 1067 129 2000 143 51
+  color lightmediumblue xyzwh 1100.9 266.6 2000 211 51
 end
-simplerelationcanvas 128515 simplerelation_ref 128003
-  from ref 128259 z 2001 to ref 128003
+componentcanvas 140291 component_ref 137347 // Fichier glade pour IHM calculate
+  draw_component_as_icon default show_component_req_prov default show_component_rea default show_stereotype_properties default
+  color lightmediumblue xyzwh 1107.7 395.1 2000 185 51
 end
-simplerelationcanvas 128643 simplerelation_ref 128131
-  from ref 128387 z 2006 to ref 128259
+componentcanvas 140675 component_ref 137475 // Architecture du module Calculate
+  draw_component_as_icon default show_component_req_prov default show_component_rea default show_stereotype_properties default
+  color lightmediumblue xyzwh 756.9 308.9 2006 197 51
 end
-simplerelationcanvas 129155 simplerelation_ref 128387
-  from ref 129027 z 2001 to ref 128131
+componentcanvas 141187 component_ref 137603 // Maquette IHM generale
+  draw_component_as_icon default show_component_req_prov default show_component_rea default show_stereotype_properties default
+  color lightmediumblue xyzwh 1467.1 1093.1 2000 143 51
 end
-simplerelationcanvas 129283 simplerelation_ref 128515
-  from ref 128899 z 2001 to ref 129027
+componentcanvas 141443 component_ref 137731 // Fichier glade IHM generale
+  draw_component_as_icon default show_component_req_prov default show_component_rea default show_stereotype_properties default
+  color lightmediumblue xyzwh 1697.7 1093.1 2000 157 51
 end
-simplerelationcanvas 129539 simplerelation_ref 128643
-  from ref 129411 z 2001 to ref 128899
+componentcanvas 141827 component_ref 137859 // Main
+  draw_component_as_icon default show_component_req_prov default show_component_rea default show_stereotype_properties default
+  color lightmediumblue xyzwh 2547 803.1 2000 143 51
 end
-simplerelationcanvas 130051 simplerelation_ref 128899
-  from ref 129923 z 2001 to ref 128131
+componentcanvas 142339 component_ref 144387 // Implementation IHM generale
+  draw_component_as_icon default show_component_req_prov default show_component_rea default show_stereotype_properties default
+  color lightmediumblue xyzwh 2328.7 805 2000 175 51
 end
-simplerelationcanvas 130307 simplerelation_ref 129027
-  from ref 130179 z 2001 to ref 129923
+componentcanvas 142851 component_ref 144515 // GroundGenerator
+  draw_component_as_icon default show_component_req_prov default show_component_rea default show_stereotype_properties default
+  xyzwh 2547.8 940.9 2000 143 51
 end
-simplerelationcanvas 130435 simplerelation_ref 129155
-  from ref 129667 z 2001 to ref 130179
+componentcanvas 143875 component_ref 144643 // Fichier glade pour IHM Simulate
+  draw_component_as_icon default show_component_req_prov default show_component_rea default show_stereotype_properties default
+  xyzwh 1701.5 165.4 2000 185 51
 end
-simplerelationcanvas 131075 simplerelation_ref 129283
-  from ref 128131 z 2001 to ref 130947
+componentcanvas 144259 component_ref 144771 // Maquette IHM Simulate
+  draw_component_as_icon default show_component_req_prov default show_component_rea default show_stereotype_properties default
+  xyzwh 1098 174 2000 143 51
 end
-simplerelationcanvas 131203 simplerelation_ref 129411
-  from ref 130947 z 2006 to ref 128387
+componentcanvas 144643 component_ref 151299 // Architecture de GroundAreaEnergyMapNavigator
+  draw_component_as_icon default show_component_req_prov default show_component_rea default show_stereotype_properties default
+  color lightmediumblue xyzwh 259 183 2000 281 51
 end
-simplerelationcanvas 131459 simplerelation_ref 129539
-  from ref 131331 z 2001 to ref 130947
+componentcanvas 144771 component_ref 151427 // Implementation de GroundAreaEnergyMapNavigator
+  draw_component_as_icon default show_component_req_prov default show_component_rea default show_stereotype_properties default
+  color lightmediumblue xyzwh 678 184 2000 299 51
 end
-simplerelationcanvas 131715 simplerelation_ref 129667
+simplerelationcanvas 135939 simplerelation_ref 138371
+  from ref 128003 z 2001 to ref 128259
+end
+simplerelationcanvas 136067 simplerelation_ref 138499
+  from ref 128259 z 2006 to ref 128387
+end
+simplerelationcanvas 136323 simplerelation_ref 138755
+  from ref 130947 z 2001 to ref 133891
+end
+simplerelationcanvas 136451 simplerelation_ref 138883
+  from ref 130947 z 2001 to ref 131331
+end
+simplerelationcanvas 136707 simplerelation_ref 139139
+  from ref 128131 z 2001 to ref 131971
+end
+simplerelationcanvas 136835 simplerelation_ref 139267
+  from ref 131331 z 2001 to ref 131971
+end
+simplerelationcanvas 137091 simplerelation_ref 139395
+  from ref 131331 z 2001 to ref 132867
+end
+simplerelationcanvas 137219 simplerelation_ref 139523
+  from ref 131331 z 2001 to ref 133379
+end
+simplerelationcanvas 137347 simplerelation_ref 139651
+  from ref 130947 z 2001 to ref 133763
+end
+simplerelationcanvas 137475 simplerelation_ref 139779
+  from ref 133763 z 2001 to ref 135427
+end
+simplerelationcanvas 137603 simplerelation_ref 139907
+  from ref 133891 z 2001 to ref 134787
+end
+simplerelationcanvas 137731 simplerelation_ref 140035
+  from ref 134787 z 2001 to ref 134659
+end
+simplerelationcanvas 137859 simplerelation_ref 140163
+  from ref 132867 z 2001 to ref 133123
+end
+simplerelationcanvas 138371 simplerelation_ref 140291
+  from ref 133379 z 2001 to point 606 513
+  line 143491 z 2001 to ref 131587
+end
+simplerelationcanvas 138499 simplerelation_ref 140419
+  from ref 132483 z 2001 to ref 131587
+end
+simplerelationcanvas 138627 simplerelation_ref 140547
+  from ref 131971 z 2001 to ref 132483
+end
+simplerelationcanvas 139011 simplerelation_ref 140803
+  from ref 128131 z 2001 to ref 129027
+end
+simplerelationcanvas 139139 simplerelation_ref 140931
+  from ref 128131 z 2001 to ref 129923
+end
+simplerelationcanvas 139267 simplerelation_ref 141059
+  from ref 129027 z 2001 to ref 128899
+end
+simplerelationcanvas 139395 simplerelation_ref 141187
+  from ref 128899 z 2001 to ref 129411
+end
+simplerelationcanvas 139651 simplerelation_ref 141315
+  from ref 129411 z 2001 to ref 131587
+end
+simplerelationcanvas 139907 simplerelation_ref 141571
+  from ref 130179 z 2001 to ref 129667
+end
+simplerelationcanvas 140035 simplerelation_ref 141699
+  from ref 129923 z 2001 to ref 130179
+end
+simplerelationcanvas 140163 simplerelation_ref 141827
+  from ref 129411 z 2001 to ref 129667
+end
+simplerelationcanvas 140419 simplerelation_ref 141955
+  from ref 133763 z 2001 to ref 140291
+end
+simplerelationcanvas 140803 simplerelation_ref 142083
+  from ref 135427 z 2007 to ref 140675
+end
+simplerelationcanvas 140931 simplerelation_ref 142211
+  from ref 140291 z 2007 to ref 140675
+end
+simplerelationcanvas 141059 simplerelation_ref 142339
+  from ref 140675 z 2007 to point 471 413
+  line 143363 z 2007 to ref 131587
+end
+simplerelationcanvas 141571 simplerelation_ref 142595
+  from ref 141443 z 2001 to ref 141187
+end
+simplerelationcanvas 141699 simplerelation_ref 142723
+  from ref 130947 z 2001 to ref 141443
+end
+simplerelationcanvas 141955 simplerelation_ref 142851
+  from ref 128387 z 2006 to ref 141827
+end
+simplerelationcanvas 142467 simplerelation_ref 149507
+  from ref 141827 z 2001 to ref 142339
+end
+simplerelationcanvas 142595 simplerelation_ref 149635
+  from ref 142339 z 2001 to ref 130947
+end
+simplerelationcanvas 142979 simplerelation_ref 149763
+  from ref 142851 z 2001 to ref 128131
+end
+simplerelationcanvas 143107 simplerelation_ref 149891
+  from ref 128387 z 2006 to ref 142851
+end
+simplerelationcanvas 143235 simplerelation_ref 150019
   from ref 129667 z 2001 to ref 131587
 end
-simplerelationcanvas 131843 simplerelation_ref 129795
-  from ref 131587 z 2001 to ref 129411
+simplerelationcanvas 143747 simplerelation_ref 150275
+  from ref 134787 z 2001 to ref 131971
 end
-simplerelationcanvas 132227 simplerelation_ref 130051
-  from ref 131971 z 2001 to ref 128131
+simplerelationcanvas 144003 simplerelation_ref 150403
+  from ref 143875 z 2001 to ref 134787
 end
-simplerelationcanvas 132355 simplerelation_ref 130179
-  from ref 131971 z 2001 to ref 131331
+simplerelationcanvas 144131 simplerelation_ref 150531
+  from ref 133891 z 2001 to ref 143875
 end
-simplerelationcanvas 132611 simplerelation_ref 130307
-  from ref 131587 z 2001 to ref 132483
+simplerelationcanvas 144387 simplerelation_ref 150659
+  from ref 144259 z 2001 to ref 134659
 end
-simplerelationcanvas 132739 simplerelation_ref 130435
-  from ref 132483 z 2001 to ref 131971
+simplerelationcanvas 144515 simplerelation_ref 150787
+  from ref 134787 z 2001 to ref 144259
 end
-simplerelationcanvas 132995 simplerelation_ref 130563
-  from ref 132867 z 2001 to ref 131331
+simplerelationcanvas 144899 simplerelation_ref 157315
+  from ref 140675 z 2007 to ref 144643
 end
-simplerelationcanvas 133251 simplerelation_ref 130691
-  from ref 133123 z 2001 to ref 132867
+simplerelationcanvas 145027 simplerelation_ref 157443
+  from ref 144771 z 2001 to ref 144643
 end
-simplerelationcanvas 133507 simplerelation_ref 130819
-  from ref 131587 z 2001 to ref 133379
+simplerelationcanvas 145155 simplerelation_ref 157571
+  from ref 134787 z 2001 to point 585 53
+  line 145283 z 2001 to ref 144643
 end
-simplerelationcanvas 133635 simplerelation_ref 130947
-  from ref 133379 z 2001 to ref 131331
-end
-simplerelationcanvas 134531 simplerelation_ref 131203
-  from ref 131971 z 2001 to ref 133763
-end
-simplerelationcanvas 134915 simplerelation_ref 131331
-  from ref 134659 z 2001 to ref 134787
-end
-simplerelationcanvas 135043 simplerelation_ref 131459
-  from ref 134787 z 2001 to ref 133891
-end
-simplerelationcanvas 135171 simplerelation_ref 131587
-  from ref 133891 z 2001 to point 1822 169
-  line 135299 z 2001 to ref 130947
-end
-simplerelationcanvas 135555 simplerelation_ref 131715
-  from ref 135427 z 2001 to ref 133763
-end
-simplerelationcanvas 135683 simplerelation_ref 131843
-  from ref 131587 z 2001 to ref 135427
+simplerelationcanvas 145411 simplerelation_ref 157699
+  from ref 144643 z 2001 to ref 131587
 end
 end

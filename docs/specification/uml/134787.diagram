@@ -1,0 +1,74 @@
+format 76
+
+classcanvas 128131 class_ref 135299 // CalculateWorker
+  draw_all_relations default hide_attributes default hide_operations default hide_getset_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_context default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_relation_visibility default show_infonote default shadow default show_stereotype_properties default
+  xyz 151 78 2000
+end
+classcanvas 128259 class_ref 128515 // GroundArea
+  draw_all_relations default hide_attributes default hide_operations default hide_getset_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_context default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_relation_visibility default show_infonote default shadow default show_stereotype_properties default
+  xyz 496 483 2000
+end
+classcanvas 128387 class_ref 128643 // Ground
+  draw_all_relations default hide_attributes default hide_operations default hide_getset_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_context default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_relation_visibility default show_infonote default shadow default show_stereotype_properties default
+  xyz 686 639 2006
+end
+classcanvas 129027 class_ref 135171 // CalculateUI
+  draw_all_relations default hide_attributes default hide_operations default hide_getset_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_context default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_relation_visibility default show_infonote default shadow default show_stereotype_properties default
+  xyz 481 56 2011
+end
+note 129283 "Calcule les energy_map pour chaque seconde
+de la timeline."
+  xyzwh 15 4 2013 341 49
+classcanvas 129411 class_ref 148611 // GroundAreaEnergyMap
+  draw_all_relations default hide_attributes default hide_operations default hide_getset_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_context default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_relation_visibility default show_infonote default shadow default show_stereotype_properties default
+  xyz 170 595 2005
+end
+classcanvas 129795 class_ref 148739 // GroundAreaEnergyMapNavigator
+  draw_all_relations default hide_attributes default hide_operations default hide_getset_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_context default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_relation_visibility default show_infonote default shadow default show_stereotype_properties default
+  xyz 131 344 2000
+end
+note 130307 "Le lien se fait au travers de simulation"
+  xyzwh 15 271 2000 165 47
+classcanvas 131331 class_ref 148867 // Timeline
+  draw_all_relations default hide_attributes default hide_operations default hide_getset_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_context default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_relation_visibility default show_infonote default shadow default show_stereotype_properties default
+  xyz 535 344 2000
+end
+relationcanvas 128771 relation_ref 134915 // <composition>
+  geometry HV
+  from ref 128259 z 2007 to point 744 520
+  line 128899 z 2007 to ref 128387
+  no_role_a no_role_b
+  multiplicity_a_pos 732 620 3000 multiplicity_b_pos 648 529 3000
+end
+relationcanvas 129155 relation_ref 141443 // <composition>
+  from ref 129027 z 2012 to ref 128131
+  no_role_a no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+relationcanvas 129539 relation_ref 141571 // <dependency>
+  geometry HV
+  from ref 129411 z 2006 to point 564 709
+  line 129667 z 2006 to ref 128259
+  no_role_a no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+relationcanvas 129923 relation_ref 141699 // <aggregation>
+  from ref 129795 z 2006 to ref 129411
+  no_role_a no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+relationcanvas 130179 relation_ref 141955 // <dependency>
+  from ref 128131 z 2001 to ref 129795
+  no_role_a no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+relationcanvas 131459 relation_ref 142083 // <dependency>
+  from ref 128131 z 2001 to ref 131331
+  no_role_a no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+line 130435 -_-_
+  from ref 130307 z 2002 to ref 130179
+line 131587 -_-_
+  from ref 130435 z 2003 to ref 131459
+end

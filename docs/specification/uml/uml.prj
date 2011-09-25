@@ -1,6 +1,6 @@
 format 76
 "uml"
-  revision 1
+  revision 2
   modified_by 3 "Fabien_2"
 
 
@@ -38,6 +38,8 @@ format 76
 
   mark_for_import
   
+  ncouples 1
+  key "html dir" value "d:/Temp/"
   package_ref 128003 // Project
 
   package_ref 128131 // Composants
