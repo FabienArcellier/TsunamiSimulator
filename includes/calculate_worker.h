@@ -35,3 +35,23 @@ void calculate_worker_start (PtrCalculateWorker);
  * \brief Demande au worker d'interrompre son fonctionnement
  */
 void calculate_worker_cancel (PtrCalculateWorker);
+
+/*!
+ * \brief Assesseur en ecriture de l'attribut simulation
+ */
+void calculate_worker_set_simulation (PtrCalculateWorker, PtrSimulation);
+
+/*!
+ * \brief Assesseur en lecture de l'attribut simulation
+ */
+PtrSimulation calculate_worker_get_simulation (PtrCalculateWorker);
+
+/*!
+ * \brief Assesseur en ecriture de l'attribut state
+ */
+void calculate_worker_set_state (PtrCalculateWorker, enum CalculateWorkerState);
+
+/*!
+ * \brief Assesseur en lecture de l'attribut state
+ */
+enum CalculateWorkerState calculate_worker_get_state (PtrCalculateWorker);

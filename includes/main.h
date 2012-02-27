@@ -2,7 +2,7 @@ typedef struct main_struct
 {
 	int argc;
 	char **argv;
-	PtrMainUI main_ui
+	PtrMainUI main_ui;
 } MainStruct;
 
 typedef MainStruct * PtrMainStruct;

@@ -3,6 +3,9 @@ typedef struct simulation
 	PtrTimeline timeline;
 	PtrGroundArea ground_area;
 	PtrGroundAreaEnergyMapNavigator ground_area_energy_map_navigator;
+	
+	// States
+	int simulation_calculated;
 } Simulation;
 
 typedef Simulation * PtrSimulation;
@@ -45,3 +48,13 @@ void simulation_set_energy_map_navigator (PtrSimulation, PtrGroundAreaEnergyMapN
  * \brief Assesseur en lecture de ground_area_energy_map_navigator
  */
 PtrGroundAreaEnergyMapNavigator simulation_get_energy_map_navigator (PtrSimulation);
+
+/*!
+ * \brief Assesseur en ecriture de l'attribut simulation_calculated
+ */
+void simulation_set_simulation_calculated (PtrSimulation, int);
+
+/*!
+ * \brief Assesseur en lecture de l'attribut simulation_calculated
+ */
+int simulation_get_simulation_calculated (PtrSimulation);

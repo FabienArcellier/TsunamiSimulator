@@ -161,7 +161,11 @@ void ground_area_energy_map_set_previous (PtrGroundAreaEnergyMap ground_area_ene
 	assert (ground_area_energy_map != NULL);
 
 	ground_area_energy_map -> previous = ground_area_energy_map_to_set;
-	ground_area_energy_map_to_set -> next = ground_area_energy_map;
+	
+	if (ground_area_energy_map_to_set != NULL)
+	{
+		ground_area_energy_map_to_set -> next = ground_area_energy_map;
+	}
 }
 
 /*!

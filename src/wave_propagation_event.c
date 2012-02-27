@@ -22,6 +22,7 @@ void wave_propagation_event_create (PtrWavePropagationEvent *wave_propagation_ev
 	
 	*wave_propagation_event = (PtrWavePropagationEvent) malloc (sizeof (WavePropagationEvent));
 	memset (*wave_propagation_event, 0, sizeof (WavePropagationEvent));
+	strcpy (EVENT (*wave_propagation_event) -> type, "wave_propagation_event");
 	
 	wave_propagation_event_init (*wave_propagation_event, ground, wave_signal);
 }

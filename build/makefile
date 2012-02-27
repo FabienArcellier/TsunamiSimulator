@@ -5,11 +5,11 @@ TESTS=../tests
 INCLUDES=../includes
 
 CC=gcc
-CFLAGS=-Wall -pg `pkg-config --cflags gtk+-2.0` -I "$(INCLUDES)" -I "$(INCLUDES)/privates"
-LDFLAGS=-Wall -pg `pkg-config --libs gtk+-2.0` `pkg-config --libs gmodule-2.0`
+CFLAGS=-Wall `pkg-config --cflags gtk+-2.0` -I "$(INCLUDES)" -I "$(INCLUDES)/privates"
+LDFLAGS=-Wall `pkg-config --libs gtk+-2.0` `pkg-config --libs gmodule-2.0`
 EXEC=main
 
-OBJ_FILES=$(OBJ)/angle.o $(OBJ)/file.o $(OBJ)/event.o $(OBJ)/wave_signal.o $(OBJ)/ground.o $(OBJ)/ground_neighbour.o $(OBJ)/ground_area.o $(OBJ)/ground_area_text_storage.o $(OBJ)/timeline.o $(OBJ)/wave_propagation_event.o $(OBJ)/ground_area_energy_map.o $(OBJ)/ground_area_energy_map_navigator.o $(OBJ)/ground_area_energy_text_storage.o $(OBJ)/propagation_timeline_processings.o $(OBJ)/earthquake_event.o $(OBJ)/ground_area_to_pixbuf_factory.o $(OBJ)/simulation.o $(OBJ)/simulation_text_storage.o $(OBJ)/earthquake_events_text_storage.o $(OBJ)/ground_area_energy_text_storage.o $(OBJ)/calculate_worker.o $(OBJ)/calculate_ui.o $(OBJ)/main_ui.o
+OBJ_FILES=$(OBJ)/angle.o $(OBJ)/file.o $(OBJ)/event.o $(OBJ)/wave_signal.o $(OBJ)/ground.o $(OBJ)/ground_neighbour.o $(OBJ)/ground_area.o $(OBJ)/ground_area_text_storage.o $(OBJ)/timeline.o $(OBJ)/wave_propagation_event.o $(OBJ)/ground_area_energy_map.o $(OBJ)/ground_area_energy_map_navigator.o $(OBJ)/ground_area_energy_text_storage.o $(OBJ)/propagation_timeline_processings.o $(OBJ)/earthquake_event.o $(OBJ)/ground_area_to_pixbuf_factory.o $(OBJ)/simulation.o $(OBJ)/simulation_text_storage.o $(OBJ)/earthquake_events_text_storage.o $(OBJ)/ground_area_energy_text_storage.o $(OBJ)/calculate_worker.o $(OBJ)/calculate_ui.o $(OBJ)/simulate_ui.o $(OBJ)/main_ui.o
 
 all: $(BIN)/$(EXEC) copy_ui
 
@@ -17,7 +17,7 @@ console: $(BIN)/main_console
 
 test_cyril:$(BIN)/ground_area_builder_tests
 
-tests: $(BIN)/angle_tests $(BIN)/event_tests $(BIN)/earthquake_event_tests $(BIN)/earthquake_event_spike $(BIN)/wave_propagation_event_tests $(BIN)/timeline_tests $(BIN)/propagation_timeline_processings_tests $(BIN)/wave_signal_tests $(BIN)/ground_tests $(BIN)/ground_neighbour_tests $(BIN)/ground_area_tests $(BIN)/ground_area_energy_map_tests $(BIN)/ground_area_energy_text_storage_tests $(BIN)/ground_area_energy_map_navigator_tests $(BIN)/ground_view_spike $(BIN)/ground_area_text_storage_tests $(BIN)/earthquake_propagation_with_report_spike $(BIN)/earthquake_events_text_storage_tests tests_copy $(BIN)/earthquake_propagation_with_report_spike_with_map $(BIN)/ground_area_to_pixbuf_factory_tests $(BIN)/simulation_tests $(BIN)/simulation_text_storage_tests $(BIN)/calculate_worker_tests $(BIN)/calculate_ui_tests $(BIN)/main_ui_tests copy_ui
+tests: $(BIN)/angle_tests $(BIN)/file_tests $(BIN)/event_tests $(BIN)/earthquake_event_tests $(BIN)/earthquake_event_spike $(BIN)/wave_propagation_event_tests $(BIN)/timeline_tests $(BIN)/propagation_timeline_processings_tests $(BIN)/wave_signal_tests $(BIN)/ground_tests $(BIN)/ground_neighbour_tests $(BIN)/ground_area_tests $(BIN)/ground_area_energy_map_tests $(BIN)/ground_area_energy_text_storage_tests $(BIN)/ground_area_energy_map_navigator_tests $(BIN)/ground_view_spike $(BIN)/ground_area_text_storage_tests $(BIN)/earthquake_propagation_with_report_spike $(BIN)/earthquake_events_text_storage_tests tests_copy $(BIN)/earthquake_propagation_with_report_spike_with_map $(BIN)/ground_area_to_pixbuf_factory_tests $(BIN)/simulation_tests $(BIN)/simulation_text_storage_tests $(BIN)/calculate_worker_tests $(BIN)/calculate_ui_tests $(BIN)/simulate_ui_tests $(BIN)/main_ui_tests copy_ui
 
 #################################
 #
@@ -35,6 +35,9 @@ $(BIN)/main_ui_tests: $(OBJ_FILES) $(OBJ)/main_ui_tests.o
 	$(CC) $(LDFLAGS) -o $@ $^
 
 $(BIN)/calculate_ui_tests: $(OBJ_FILES) $(OBJ)/calculate_ui_tests.o
+	$(CC) $(LDFLAGS) -o $@ $^
+
+$(BIN)/simulate_ui_tests: $(OBJ_FILES) $(OBJ)/simulate_ui_tests.o
 	$(CC) $(LDFLAGS) -o $@ $^
 
 $(BIN)/calculate_worker_tests: $(OBJ_FILES) $(OBJ)/calculate_worker_tests.o
@@ -106,6 +109,9 @@ $(BIN)/earthquake_event_tests: $(OBJ_FILES) $(OBJ)/earthquake_event_tests.o
 $(BIN)/event_tests: $(OBJ_FILES) $(OBJ)/event_tests.o
 	$(CC) $(LDFLAGS) -o $@ $^
 
+$(BIN)/file_tests: $(OBJ_FILES) $(OBJ)/file_tests.o
+	$(CC) $(LDFLAGS) -o $@ $^
+
 $(BIN)/angle_tests: $(OBJ_FILES) $(OBJ)/angle_tests.o
 	$(CC) $(LDFLAGS) -o $@ $^
 
@@ -120,8 +126,11 @@ $(OBJ)/main.o : $(SRC)/main.c $(INCLUDES)/main.h
 
 $(OBJ)/Main_console.o : $(SRC)/Main_console.c
 	$(CC) $(CFLAGS) -o $@ -c $<
+ 
+$(OBJ)/main_ui.o : $(SRC)/ui/main_ui.c $(INCLUDES)/ui/main_ui.h $(INCLUDES)/ui/main_ui_private.h
+	$(CC) $(CFLAGS) -o $@ -c $<
 
-$(OBJ)/main_ui.o : $(SRC)/ui/main_ui.c $(INCLUDES)/ui/main_ui.h
+$(OBJ)/simulate_ui.o : $(SRC)/ui/simulate_ui.c $(INCLUDES)/ui/simulate_ui.h $(INCLUDES)/ui/simulate_ui_private.h
 	$(CC) $(CFLAGS) -o $@ -c $<
 
 $(OBJ)/calculate_ui.o : $(SRC)/ui/calculate_ui.c $(INCLUDES)/ui/calculate_ui.h
@@ -202,6 +211,9 @@ $(OBJ)/colored_pixbuf_factory.o: $(SRC)/colored_pixbuf_factory.c $(INCLUDES)/col
 $(OBJ)/main_ui_tests.o: $(TESTS)/main_ui_tests.c
 	$(CC) $(CFLAGS) -o $@ -c $<
 
+$(OBJ)/simulate_ui_tests.o: $(TESTS)/simulate_ui_tests.c
+	$(CC) $(CFLAGS) -o $@ -c $<
+
 $(OBJ)/calculate_ui_tests.o: $(TESTS)/calculate_ui_tests.c
 	$(CC) $(CFLAGS) -o $@ -c $<
 
@@ -272,6 +284,9 @@ $(OBJ)/earthquake_event_tests.o : $(TESTS)/earthquake_event_tests.c
 	$(CC) $(CFLAGS) -o $@ -c $<
 
 $(OBJ)/event_tests.o : $(TESTS)/event_tests.c
+	$(CC) $(CFLAGS) -o $@ -c $<
+
+$(OBJ)/file_tests.o : $(TESTS)/file_tests.c
 	$(CC) $(CFLAGS) -o $@ -c $<
 
 $(OBJ)/angle_tests.o : $(TESTS)/angle_tests.c

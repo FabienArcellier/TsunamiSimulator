@@ -93,3 +93,23 @@ PtrGroundAreaEnergyMapNavigator simulation_get_energy_map_navigator (PtrSimulati
 	assert (simulation != NULL);
 	return simulation -> ground_area_energy_map_navigator;
 }
+
+/*!
+ * \brief Assesseur en ecriture de l'attribut simulation_calculated
+ */
+void simulation_set_simulation_calculated (PtrSimulation simulation, int simulation_calculated)
+{
+	assert (simulation != NULL);
+	assert (simulation_calculated == 0 || simulation_calculated == 1);
+	
+	simulation -> simulation_calculated = simulation_calculated;
+}
+
+/*!
+ * \brief Assesseur en lecture de l'attribut simulation_calculated
+ */
+int simulation_get_simulation_calculated (PtrSimulation simulation)
+{
+	assert (simulation != NULL);
+	return simulation -> simulation_calculated;
+}

@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include "debug.h"
 #include "wave_signal.h"
 #include "ground.h"
 #include "ground_area.h"
@@ -100,7 +101,12 @@ void ground_area_energy_map_navigator_delete (PtrGroundAreaEnergyMapNavigator gr
 			PtrGroundAreaEnergyMap previous = ground_area_energy_map_get_previous (current);
 			if (previous == NULL)
 			{
+				if (next != NULL)
+				{
+					ground_area_energy_map_set_previous (next, NULL);
+				}
 				ground_area_energy_map_navigator -> first = next;
+				ground_area_energy_map_navigator -> current = next;
 				ground_area_energy_map_navigator -> count = count - 1;
 			}
 			else
@@ -113,7 +119,7 @@ void ground_area_energy_map_navigator_delete (PtrGroundAreaEnergyMapNavigator gr
 		}
 		else
 		{
-			fprintf (stderr, "You try to delete an element ground_area_energy map that does not exist");
+			fprintf (stderr, "You try to delete an element ground_area_energy map that does not exist\n");
 			return;
 		}
 	}
@@ -190,7 +196,7 @@ int ground_area_energy_map_navigator_move_position (PtrGroundAreaEnergyMapNaviga
 	}
 	
 	ground_area_energy_map_navigator -> current = current;
-	return 0;
+	return 1;
 }
 
 /*!

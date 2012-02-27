@@ -31,3 +31,13 @@ void ground_area_destroy (PtrGroundArea*);
  * \brief Retourne l'objet PtrGround pour les coordonnées données (indice)
  */
 PtrGround ground_area_get_ground (PtrGroundArea, int x, int y);
+
+/*!
+ * \brief Assesseur en lecture de l'attribut array_width
+ */
+int ground_area_get_array_width (PtrGroundArea);
+
+/*!
+ * \brief Assesseur en lecture de l'attribut array_length
+ */
+int ground_area_get_array_length (PtrGroundArea);

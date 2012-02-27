@@ -18,6 +18,7 @@ void earthquake_event_create (PtrEarthquakeEvent* earthquake_event)
 	
 	EVENT (*earthquake_event) -> Destroy = earthquake_event_destroy_parent;
 	EVENT (*earthquake_event) -> Execute = earthquake_event_execute_parent;
+	strcpy (EVENT (*earthquake_event) -> type, "earthquake_event");
 	(*earthquake_event) -> Destroy = earthquake_event_destroy;
 	(*earthquake_event) -> Execute = earthquake_event_execute;
 }
@@ -35,6 +36,7 @@ void earthquake_event_destroy (PtrEarthquakeEvent* earthquake_event)
 /*!
  * \brief Detruit une instance de type EarthquakeEvent
  */
+
 void earthquake_event_destroy_parent (PtrEvent* event)
 {
 	PtrEarthquakeEvent* earthquake_event = (PtrEarthquakeEvent*) event;

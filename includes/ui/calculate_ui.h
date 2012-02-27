@@ -2,8 +2,10 @@ typedef struct calculate_ui
 {
 	// Widgets
 	GtkWindow* window;
-	GtkProgressBar progress_bar;
+	GtkProgressBar* progress_bar;
 	GtkButton* cancel_button;
+	GtkLabel* progression_label;
+	GtkSpinner* spinner;
 	
 	//Variables
 	PtrCalculateWorker calculate_worker;
@@ -16,7 +18,7 @@ typedef CalculateUI* PtrCalculateUI;
 /*!
  * \brief Instancie un objet calculate_ui
  */
-void calculate_ui_create (PtrCalculateUI*);
+void calculate_ui_create (PtrCalculateUI*, PtrSimulation);
 
 /*!
  * \brief Detruit un objet calculate_ui
@@ -47,3 +49,8 @@ void calculate_ui_refresh_ihm_states (PtrCalculateUI);
  * \brief Demarre le worker de calcul
  */
 void calculate_ui_start_worker (PtrCalculateUI);
+
+/*!
+ * \brief Assesseur en lecture de l'attribut simulation
+ */
+PtrSimulation calculate_ui_get_simulation (PtrCalculateUI);

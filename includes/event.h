@@ -3,6 +3,7 @@ typedef struct event
 	void (*Execute) (struct event*);
 	void (*Destroy) (struct event**);
 	int time;
+	char type[255];
 	struct event* next;
 } Event;
 

@@ -53,6 +53,8 @@ void calculate_worker_destroy (PtrCalculateWorker *calculate_worker)
 void calculate_worker_start (PtrCalculateWorker calculate_worker)
 {
 	assert (calculate_worker != NULL);
+	assert (calculate_worker -> simulation != NULL);
+	
 	int result = pthread_create (&(calculate_worker -> pid), NULL, calculate_energy_map, calculate_worker);
 	if (result != 0)
 	{
@@ -97,7 +99,8 @@ void *calculate_energy_map (void *data)
 	
 	int final_time = timeline_get_final_time (timeline);
 	int i = 0;
-	while (timeline_get_current_time (timeline) < final_time && calculate_worker -> cancel_requested != 1)
+	
+	while (timeline_get_current_time (timeline) <= final_time && calculate_worker -> cancel_requested != 1)
 	{
 		register_events_for_propagation_on_timeline_from_ground_area (timeline,
 																																	ground_area);
@@ -106,10 +109,17 @@ void *calculate_energy_map (void *data)
 		
 		PtrGroundAreaEnergyMap ground_area_energy_map = NULL;
 		ground_area_energy_map_create (&ground_area_energy_map, ground_area);
-		timeline_move_current_time (timeline, 1);
-		
 		ground_area_energy_map_navigator_add (ground_area_energy_map_navigator, ground_area_energy_map);
 		i++;
+		
+		if (timeline_get_current_time (timeline) < final_time)
+		{
+			timeline_move_current_time (timeline, 1);
+		}
+		else
+		{
+			break;
+		}
 	}
 	
 	if (calculate_worker -> cancel_requested)
@@ -124,11 +134,49 @@ void *calculate_energy_map (void *data)
 		}
 		
 		calculate_worker -> state = calculate_worker_state_canceled;
+		simulation_set_simulation_calculated (simulation, 0);
 	}
 	else
 	{
 		calculate_worker -> state = calculate_worker_state_done;
+		simulation_set_simulation_calculated (simulation, 1);
 	}
 	
 	return NULL;
+}
+
+/*!
+ * \brief Assesseur en ecriture de l'attribut simulation
+ */
+void calculate_worker_set_simulation (PtrCalculateWorker calculate_worker, PtrSimulation simulation)
+{
+	assert (calculate_worker != NULL);
+	calculate_worker -> simulation = simulation;
+}
+
+/*!
+ * \brief Assesseur en lecture de l'attribut simulation
+ */
+PtrSimulation calculate_worker_get_simulation (PtrCalculateWorker calculate_worker)
+{
+	assert (calculate_worker != NULL);
+	return calculate_worker -> simulation;
+}
+
+/*!
+ * \brief Assesseur en ecriture de l'attribut state
+ */
+void calculate_worker_set_state (PtrCalculateWorker calculate_worker, enum CalculateWorkerState state)
+{
+	assert (calculate_worker != NULL);
+	calculate_worker -> state = state;
+}
+
+/*!
+ * \brief Assesseur en lecture de l'attribut state
+ */
+enum CalculateWorkerState calculate_worker_get_state (PtrCalculateWorker calculate_worker)
+{
+	assert (calculate_worker != NULL);
+	return calculate_worker -> state;
 }

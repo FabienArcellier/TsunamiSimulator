@@ -65,27 +65,29 @@ void earthquake_events_text_storage_write_file (PtrEarthquakeEventsTextStorage e
 	assert (earthquake_events_text_storage -> file != NULL);
 	assert (earthquake_event_cast != NULL);
 	
-	PtrEarthquakeEvent earthquake_event = (PtrEarthquakeEvent) earthquake_event_cast; 
-	
 	FILE* file = earthquake_events_text_storage_get_file (earthquake_events_text_storage);
 	fprintf (file, "#temps\ttype\tpositionX\tpositionY\tEnergie\n");
 	
-	while (earthquake_event != NULL)
+	while (earthquake_event_cast != NULL)
 	{
-		int time = event_get_time (EVENT (earthquake_event));
-		PtrGround ground = earthquake_event_get_ground (earthquake_event);
-		int positionX = ground_get_position_X (ground);
-		int positionY = ground_get_position_Y (ground);
-		double energy = earthquake_event_get_energy (earthquake_event);
+		if (strcmp(earthquake_event_cast -> type, "earthquake_event") == 0)
+		{
+			PtrEarthquakeEvent earthquake_event = (PtrEarthquakeEvent) earthquake_event_cast; 
+			int time = event_get_time (EVENT (earthquake_event));
+			PtrGround ground = earthquake_event_get_ground (earthquake_event);
+			int positionX = ground_get_position_X (ground);
+			int positionY = ground_get_position_Y (ground);
+			double energy = earthquake_event_get_energy (earthquake_event);
+			
+			fprintf (file,
+							"%d\t%d\t%d\t%f\n",
+							time,
+							positionX,
+							positionY,
+							energy);
+		}
 		
-		fprintf (file,
-						 "%d\t%d\t%d\t%f\n",
-						 time,
-						 positionX,
-						 positionY,
-						 energy);
-		
-		earthquake_event = (PtrEarthquakeEvent) event_get_next_event (EVENT (earthquake_event));
+		earthquake_event_cast = event_get_next_event (earthquake_event_cast);
 	}
 	
 	printf ("\n");

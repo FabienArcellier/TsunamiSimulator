@@ -1,5 +1,6 @@
 #!/bin/sh
 ./angle_tests
+./file_tests
 ./earthquake_event_spike
 ./earthquake_events_text_storage_tests
 ./earthquake_event_tests

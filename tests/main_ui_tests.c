@@ -3,15 +3,28 @@
 #include <stdio.h>
 #include <string.h>
 #include "debug.h"
+
 #include "wave_signal.h"
 #include "ground.h"
 #include "ground_area.h"
 #include "ground_area_energy_map.h"
+#include "ground_area_energy_map_navigator.h"
 #include "event.h"
+#include "earthquake_event.h"
 #include "timeline.h"
 #include "simulation.h"
+
+#include "ground_area_text_storage.h"
+#include "earthquake_events_text_storage.h"
+#include "ground_area_energy_text_storage.h"
+#include "simulation_text_storage.h"
+#include "calculate_worker.h"
+
 #include <gtk/gtk.h>
+#include "ui/calculate_ui.h"
+#include "ui/simulate_ui.h"
 #include "ui/main_ui.h"
+
 
 /* Prototype des fonctions de test */
 void main_ui_create_show_tests ();

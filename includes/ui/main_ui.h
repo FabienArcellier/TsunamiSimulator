@@ -19,6 +19,8 @@ typedef struct main_ui
 	int ihm_active;
 	//
 	// Data
+	PtrCalculateUI calculate_ui;
+	PtrSimulateUI simulate_ui;
 	PtrSimulation simulation;
 } MainUI;
 
@@ -73,6 +75,36 @@ void main_ui_set_ihm_active (PtrMainUI, int);
  * \brief Assesseur en lecture de l'attribut ihm_active
  */
 int main_ui_get_ihm_active (PtrMainUI);
+
+/*!
+ * \brief Assesseur en ecriture de l'attribut simulation
+ */
+void main_ui_set_simulation (PtrMainUI, PtrSimulation);
+
+/*!
+ * \brief Assesseur en lecture de l'attribut simulation
+ */
+PtrSimulation main_ui_get_simulation (PtrMainUI);
+
+/*!
+ * \brief Assesseur en ecriture de l'attribut calculate_ui
+ */
+void main_ui_set_calculate_ui (PtrMainUI, PtrCalculateUI);
+
+/*!
+ * \brief Assesseur en lecture de l'attribut calculate_ui
+ */
+PtrCalculateUI main_ui_get_calculate_ui (PtrMainUI);
+
+/*!
+ * \brief Assesseur en ecriture de l'attribut simulate_ui
+ */
+void main_ui_set_simulate_ui (PtrMainUI, PtrSimulateUI);
+
+/*!
+ * \brief Assesseur en lecture de l'attribut simulate_ui
+ */
+PtrSimulateUI main_ui_get_simulate_ui (PtrMainUI);
 
 
 

@@ -3,14 +3,27 @@
 #include <stdio.h>
 #include <string.h>
 #include "debug.h"
+
+#include "file.h"
 #include "wave_signal.h"
 #include "ground.h"
 #include "ground_area.h"
 #include "ground_area_energy_map.h"
+#include "ground_area_energy_map_navigator.h"
 #include "event.h"
+#include "earthquake_event.h"
 #include "timeline.h"
 #include "simulation.h"
+
+#include "ground_area_text_storage.h"
+#include "earthquake_events_text_storage.h"
+#include "ground_area_energy_text_storage.h"
+#include "simulation_text_storage.h"
+#include "calculate_worker.h"
+
 #include <gtk/gtk.h>
+#include "ui/calculate_ui.h"
+#include "ui/simulate_ui.h"
 #include "ui/main_ui.h"
 
 #include "ui/main_ui_private.h" // Gestion des events
@@ -96,14 +109,30 @@ void main_ui_hide (PtrMainUI main_ui)
 void main_ui_refresh_ihm_states (PtrMainUI main_ui)
 {
 	assert (main_ui != NULL);
-
-	gtk_widget_set_sensitive (GTK_WIDGET (main_ui -> configure_button), main_ui -> ihm_active && main_ui -> simulation_loaded);
-	gtk_widget_set_sensitive (GTK_WIDGET (main_ui -> calculate_button), main_ui -> ihm_active && main_ui -> simulation_loaded);
-	gtk_widget_set_sensitive (GTK_WIDGET (main_ui -> simulate_button), main_ui -> ihm_active && main_ui -> simulation_loaded);
 	
-	gtk_widget_set_sensitive (GTK_WIDGET (main_ui -> new_menu), main_ui -> ihm_active);
+	PtrSimulation simulation = main_ui_get_simulation (main_ui);
+	int simulation_calculated = 0;
+	
+	if (simulation != NULL)
+	{
+		simulation_calculated = simulation_get_simulation_calculated (simulation);
+	}
+
+	// gtk_widget_set_sensitive (GTK_WIDGET (main_ui -> configure_button), main_ui -> ihm_active && main_ui -> simulation_loaded);
+	gtk_widget_set_sensitive (GTK_WIDGET (main_ui -> configure_button), 0);
+	gtk_widget_set_sensitive (GTK_WIDGET (main_ui -> calculate_button), main_ui -> ihm_active && main_ui -> simulation_loaded);
+	
+	int simulate_button_activated = main_ui -> ihm_active && 
+																		main_ui -> simulation_loaded && 
+																		simulation_calculated;
+
+	gtk_widget_set_sensitive (GTK_WIDGET (main_ui -> simulate_button), simulate_button_activated);
+	
+	// gtk_widget_set_sensitive (GTK_WIDGET (main_ui -> new_menu), main_ui -> ihm_active);
+	gtk_widget_set_sensitive (GTK_WIDGET (main_ui -> new_menu), 0);
 	gtk_widget_set_sensitive (GTK_WIDGET (main_ui -> open_menu), main_ui -> ihm_active);
-	gtk_widget_set_sensitive (GTK_WIDGET (main_ui -> save_menu), main_ui -> ihm_active);
+	// gtk_widget_set_sensitive (GTK_WIDGET (main_ui -> save_menu), main_ui -> ihm_active);
+	gtk_widget_set_sensitive (GTK_WIDGET (main_ui -> save_menu), 0);
 	gtk_widget_set_sensitive (GTK_WIDGET (main_ui -> quit_menu), main_ui -> ihm_active);
 }
 
@@ -156,6 +185,42 @@ int main_ui_get_ihm_active (PtrMainUI main_ui)
 	return main_ui -> ihm_active;
 }
 
+/*!
+ * \brief Assesseur en ecriture de l'attribut simulation
+ */
+void main_ui_set_simulation (PtrMainUI main_ui, PtrSimulation simulation)
+{
+	assert (main_ui != NULL);
+	main_ui -> simulation = simulation;
+}
+
+/*!
+ * \brief Assesseur en lecture de l'attribut simulation
+ */
+PtrSimulation main_ui_get_simulation (PtrMainUI main_ui)
+{
+	assert (main_ui != NULL);
+	return main_ui -> simulation;
+}
+
+/*!
+ * \brief Assesseur en ecriture de l'attribut calculate_ui
+ */
+void main_ui_set_calculate_ui (PtrMainUI main_ui, PtrCalculateUI calculate_ui)
+{
+	assert (main_ui != NULL);
+	main_ui -> calculate_ui = calculate_ui;
+}
+
+/*!
+ * \brief Assesseur en lecture de l'attribut calculate_ui
+ */
+PtrCalculateUI main_ui_get_calculate_ui (PtrMainUI main_ui)
+{
+	assert (main_ui != NULL);
+	return main_ui -> calculate_ui;
+}
+
 void on_window_destroy_event (GtkWidget* widget, gpointer data)
 {
 	assert (data != NULL);
@@ -176,16 +241,38 @@ void on_calculate_button_clicked (GtkWidget* widget, gpointer data)
 {
 	assert (data != NULL);
 	PtrMainUI main_ui = (PtrMainUI) data;
-	
 	g_debug ("on_calculate_button_clicked");
+	
+	main_ui_set_ihm_active (main_ui, 0);
+	main_ui_refresh_ihm_states (main_ui);
+	
+	PtrCalculateUI calculate_ui = NULL;
+	calculate_ui_create (&calculate_ui, main_ui_get_simulation (main_ui));
+	calculate_ui_show (calculate_ui);
+	main_ui_set_calculate_ui (main_ui, calculate_ui);
+	
+	GtkWindow *window = calculate_ui_get_window (calculate_ui);
+	g_signal_connect (GTK_WIDGET (window), "destroy", G_CALLBACK (main_ui_calculate_ui_on_window_destroy), main_ui);
+	
+	calculate_ui_start_worker (calculate_ui);
 }
 
 void on_simulate_button_clicked (GtkWidget* widget, gpointer data)
 {
 	assert (data != NULL);
 	PtrMainUI main_ui = (PtrMainUI) data;
-	
 	g_debug ("on_simulate_button_clicked");
+	
+	main_ui_set_ihm_active (main_ui, 0);
+	main_ui_refresh_ihm_states (main_ui);
+	
+	PtrSimulateUI simulate_ui = NULL;
+	simulate_ui_create (&simulate_ui, main_ui_get_simulation (main_ui));
+	simulate_ui_show (simulate_ui);
+	main_ui_set_simulate_ui (main_ui, simulate_ui);
+	
+	GtkWindow *window = simulate_ui_get_window (simulate_ui);
+	g_signal_connect (GTK_WIDGET (window), "destroy", G_CALLBACK (main_ui_simulate_ui_on_window_destroy), main_ui);
 }
 
 void on_new_menu_activate (GtkWidget* widget, gpointer data)
@@ -201,7 +288,78 @@ void on_open_menu_activate (GtkWidget* widget, gpointer data)
 	assert (data != NULL);
 	PtrMainUI main_ui = (PtrMainUI) data;
 	
+	assert (main_ui -> window != NULL);
+	
 	g_debug ("on_open_menu_activate");
+	
+	GtkWidget *dialog = NULL;
+  gchar *filename = NULL;
+  
+  dialog = gtk_file_chooser_dialog_new ("Open File ...",
+                                        main_ui -> window,
+                                        GTK_FILE_CHOOSER_ACTION_OPEN,
+                                        GTK_STOCK_CANCEL,
+                                        GTK_RESPONSE_CANCEL,
+                                        GTK_STOCK_OPEN, 
+                                        GTK_RESPONSE_ACCEPT,
+                                        NULL);
+  
+  gint result = gtk_dialog_run (GTK_DIALOG (dialog));
+  if (result == GTK_RESPONSE_ACCEPT)
+  {
+    filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
+		g_debug (filename);
+		
+		FILE* file = fopen (filename, "r");
+		
+		PtrSimulation simulation = NULL;
+		PtrSimulationTextStorage simulation_text_storage = NULL;
+		simulation_text_storage_create (&simulation_text_storage);
+		simulation_text_storage_set_file (simulation_text_storage, file);
+		simulation = simulation_text_storage_read_file (simulation_text_storage);
+		simulation_text_storage_destroy (&simulation_text_storage);
+		fclose (file);
+		
+		// Liberation de la memoire pour l'ancien composant simulation
+		if (main_ui_get_simulation (main_ui) != NULL)
+		{
+			PtrSimulation old_simulation = main_ui_get_simulation (main_ui);
+			
+			PtrTimeline old_timeline = simulation_get_timeline (old_simulation);
+			timeline_destroy (&old_timeline);
+			
+			PtrGroundArea old_ground_area = simulation_get_ground_area (old_simulation);
+			ground_area_destroy (&old_ground_area);
+			
+			PtrGroundAreaEnergyMapNavigator old_energy_map_navigator = simulation_get_energy_map_navigator (old_simulation);
+			ground_area_energy_map_navigator_destroy (&old_energy_map_navigator);
+			
+			simulation_destroy (&old_simulation);
+		}
+		
+		main_ui_set_simulation (main_ui, simulation);
+		
+		if (simulation != NULL)
+		{
+			// TODO : Securiser cette chaine de caractere
+			GtkWindow *window = main_ui_get_window (main_ui);
+			char *filename_with_extension = get_filename_with_extension (filename);
+			char title[255];
+			sprintf (title, "%s - Tsunami Simulator", filename_with_extension);
+			gtk_window_set_title (window, title);
+			free (filename_with_extension);
+			main_ui_set_simulation_loaded (main_ui, 1);
+		}
+		
+		g_free (filename);
+		main_ui_refresh_ihm_states (main_ui);
+  }
+  else
+	{
+		main_ui_refresh_ihm_states (main_ui);
+	}
+	
+  gtk_widget_destroy (dialog);
 }
 
 void on_save_menu_activate (GtkWidget* widget, gpointer data)
@@ -221,4 +379,50 @@ void on_quit_menu_activate (GtkWidget* widget, gpointer data)
 	
 	GtkWindow* window = main_ui_get_window (main_ui);
 	gtk_widget_destroy (GTK_WIDGET (main_ui -> window));
+}
+
+/*!
+ * \brief Methode appellée a l'issue du processus de calcul
+ */
+void main_ui_calculate_ui_on_window_destroy (GtkWidget* widget, gpointer data)
+{
+	assert (data != NULL);
+	PtrMainUI main_ui = (PtrMainUI) data;
+	PtrCalculateUI calculate_ui = main_ui_get_calculate_ui (main_ui);
+	calculate_ui_destroy (&calculate_ui);
+	main_ui_set_calculate_ui (main_ui, NULL);
+	
+	main_ui_set_ihm_active (main_ui, 1);
+	main_ui_refresh_ihm_states (main_ui);
+	
+}
+
+void main_ui_simulate_ui_on_window_destroy (GtkWidget* widget, gpointer data)
+{
+	assert (data != NULL);
+	PtrMainUI main_ui = (PtrMainUI) data;
+	PtrSimulateUI simulate_ui = main_ui_get_simulate_ui (main_ui);
+	simulate_ui_destroy (&simulate_ui);
+	main_ui_set_simulate_ui (main_ui, NULL);
+	
+	main_ui_set_ihm_active (main_ui, 1);
+	main_ui_refresh_ihm_states (main_ui);
+}
+
+/*!
+ * \brief Assesseur en ecriture de l'attribut simulate_ui
+ */
+void main_ui_set_simulate_ui (PtrMainUI main_ui, PtrSimulateUI simulate_ui)
+{
+	assert (main_ui != NULL);
+	main_ui -> simulate_ui = simulate_ui;
+}
+
+/*!
+ * \brief Assesseur en lecture de l'attribut simulate_ui
+ */
+PtrSimulateUI main_ui_get_simulate_ui (PtrMainUI main_ui)
+{
+	assert (main_ui != NULL);
+	return main_ui -> simulate_ui;
 }

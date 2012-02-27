@@ -118,3 +118,21 @@ PtrGround ground_area_get_ground (PtrGroundArea ground_area, int x, int y)
   return &(ground_area -> area[array_position]);
 }
 
+/*!
+ * \brief Assesseur en lecture de l'attribut array_width
+ */
+int ground_area_get_array_width (PtrGroundArea ground_area)
+{
+	assert (ground_area != NULL);
+	return ground_area -> array_width;
+}
+
+/*!
+ * \brief Assesseur en lecture de l'attribut 
+ */
+int ground_area_get_array_length (PtrGroundArea ground_area)
+{
+	assert (ground_area != NULL);
+	return ground_area -> array_length;
+}
+

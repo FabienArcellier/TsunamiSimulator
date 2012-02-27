@@ -160,8 +160,9 @@ void simulation_text_storage_write_file (PtrSimulationTextStorage simulation_tex
 	{
 		fprintf (file, "[Energies]\n");
 		ground_area_energy_text_storage_set_file (ground_area_energy_text_storage, file);
-		// PtrGroundAreaEnergyMap ground_area_energy_map = simulation -> file_ground_area_energy_map;
-		// ground_area_energy_text_storage_write_file (ground_area_energy_text_storage, ground_area_energy_map);
+		PtrGroundAreaEnergyMapNavigator ground_area_energy_map_navigator = simulation_get_energy_map_navigator (simulation);
+		PtrGroundAreaEnergyMap ground_area_energy_map = ground_area_energy_map_navigator -> first;
+		ground_area_energy_text_storage_write_file (ground_area_energy_text_storage, ground_area_energy_map);
 	}
 }
 
@@ -188,7 +189,7 @@ PtrSimulation simulation_text_storage_read_file (PtrSimulationTextStorage simula
 	
 	int time_final = 0;
 	fscanf (file, "Duree = %d s\n", &time_final);
-	DEBUG_IF (1, "%d", time_final);
+	DEBUG_IF (0, "%d", time_final);
 // 	fgets (poubelle, 255, file);
 	fscanf (file, "\n");
 	
@@ -238,10 +239,11 @@ PtrSimulation simulation_text_storage_read_file (PtrSimulationTextStorage simula
 	fgets (energies_text, 32, file);
 	if (strcmp (energies_text, "[Energies]\n") == 0)
 	{
-		/*PtrGroundAreaEnergyTextStorage ground_area_energy_text_storage = NULL;
+		PtrGroundAreaEnergyTextStorage ground_area_energy_text_storage = NULL;
 		PtrGroundAreaEnergyMap ground_area_energy_map = NULL;
 		ground_area_energy_text_storage_create (&ground_area_energy_text_storage);
-		ground_area_energy_text_storage_set_file (ground_area_energy_text_storage, file);*/
+		ground_area_energy_text_storage_set_file (ground_area_energy_text_storage, file);
+		ground_area_energy_text_storage_read_file (ground_area_energy_text_storage, ground_area);
 	}
 	else
 	{
