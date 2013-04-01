@@ -26,94 +26,94 @@ tests: $(BIN)/angle_tests $(BIN)/file_tests $(BIN)/event_tests $(BIN)/earthquake
 #################################
 
 $(BIN)/main_console: $(OBJ_FILES) $(OBJ)/Main_console.o
-	$(CC) $(LDFLAGS) -o $@ $^
+	$(CC) -o $@ $^ $(LDFLAGS) 
 
 $(BIN)/main: $(OBJ_FILES) $(OBJ)/main.o
-	$(CC) $(LDFLAGS) -o $@ $^
+	$(CC) -o $@ $^ $(LDFLAGS)
 
 $(BIN)/main_ui_tests: $(OBJ_FILES) $(OBJ)/main_ui_tests.o
-	$(CC) $(LDFLAGS) -o $@ $^
+	$(CC) -o $@ $^ $(LDFLAGS) 
 
 $(BIN)/calculate_ui_tests: $(OBJ_FILES) $(OBJ)/calculate_ui_tests.o
-	$(CC) $(LDFLAGS) -o $@ $^
+	$(CC) -o $@ $^ $(LDFLAGS)
 
 $(BIN)/simulate_ui_tests: $(OBJ_FILES) $(OBJ)/simulate_ui_tests.o
-	$(CC) $(LDFLAGS) -o $@ $^
+	$(CC) -o $@ $^ $(LDFLAGS)
 
 $(BIN)/calculate_worker_tests: $(OBJ_FILES) $(OBJ)/calculate_worker_tests.o
-	$(CC) $(LDFLAGS) -o $@ $^
+	$(CC) -o $@ $^ $(LDFLAGS)
 
 $(BIN)/ground_area_to_pixbuf_factory_tests: $(OBJ_FILES) $(OBJ)/ground_area_to_pixbuf_factory_tests.o
-	$(CC) $(LDFLAGS) -o $@ $^
+	$(CC) -o $@ $^ $(LDFLAGS) 
 
 $(BIN)/ground_area_text_storage_tests: $(OBJ_FILES) $(OBJ)/ground_area_text_storage_tests.o
-	$(CC) $(LDFLAGS) -o $@ $^
+	$(CC) -o $@ $^ $(LDFLAGS) 
 
 $(BIN)/simulation_text_storage_tests : $(OBJ_FILES) $(OBJ)/simulation_text_storage_tests.o
-	$(CC) $(LDFLAGS) -o $@ $^
+	$(CC) -o $@ $^ $(LDFLAGS) 
 
 $(BIN)/simulation_tests : $(OBJ_FILES) $(OBJ)/simulation_tests.o
-	$(CC) $(LDFLAGS) -o $@ $^
+	$(CC) -o $@ $^ $(LDFLAGS) 
 
 $(BIN)/earthquake_propagation_with_report_spike_with_map:  $(OBJ_FILES) $(OBJ)/earthquake_propagation_with_report_spike_with_map.o
-	$(CC) $(LDFLAGS) -o $@ $^
+	$(CC) -o $@ $^ $(LDFLAGS)
 
 $(BIN)/earthquake_propagation_with_report_spike:  $(OBJ_FILES) $(OBJ)/earthquake_propagation_with_report_spike.o
-	$(CC) $(LDFLAGS) -o $@ $^
+	$(CC) -o $@ $^ $(LDFLAGS)
 
 $(BIN)/ground_view_spike: $ $(OBJ_FILES) $(OBJ)/ground_view_spike.o
-	$(CC) $(LDFLAGS) -o $@ $^
+	$(CC) -o $@ $^ $(LDFLAGS)
 
 $(BIN)/ground_area_energy_map_navigator_tests: $(OBJ_FILES) $(OBJ)/ground_area_energy_map_navigator_tests.o
-	$(CC) $(LDFLAGS) -o $@ $^
+	$(CC) -o $@ $^ $(LDFLAGS) 
 
 $(BIN)/ground_area_energy_text_storage_tests: $(OBJ_FILES) $(OBJ)/ground_area_energy_text_storage_tests.o
-	$(CC) $(LDFLAGS) -o $@ $^
+	$(CC) -o $@ $^ $(LDFLAGS)
 
 $(BIN)/ground_area_energy_map_tests: $(OBJ_FILES) $(OBJ)/ground_area_energy_map_tests.o
-	$(CC) $(LDFLAGS) -o $@ $^
+	$(CC) -o $@ $^ $(LDFLAGS)
 
 $(BIN)/ground_area_builder_tests:  $(OBJ_FILES) $(OBJ)/ground_area_builder_tests.o
-	$(CC) $(LDFLAGS) -o $@ $^
+	$(CC) -o $@ $^ $(LDFLAGS)
 
 $(BIN)/ground_area_tests:  $(OBJ_FILES) $(OBJ)/ground_area_tests.o
-	$(CC) $(LDFLAGS) -o $@ $^
+	$(CC) -o $@ $^ $(LDFLAGS)
 
 $(BIN)/ground_neighbour_tests:  $(OBJ_FILES) $(OBJ)/ground_neighbour_tests.o
-	$(CC) $(LDFLAGS) -o $@ $^
+	$(CC) -o $@ $^ $(LDFLAGS)
 
 $(BIN)/ground_tests:  $(OBJ_FILES) $(OBJ)/ground_tests.o
-	$(CC) $(LDFLAGS) -o $@ $^
+	$(CC) -o $@ $^ $(LDFLAGS)
 
 $(BIN)/wave_signal_tests: $(OBJ)/wave_signal.o $(OBJ)/wave_signal_tests.o
-	$(CC) $(LDFLAGS) -o $@ $^
+	$(CC) -o $@ $^ $(LDFLAGS)
 
 $(BIN)/propagation_timeline_processings_tests: $(OBJ_FILES) $(OBJ)/propagation_timeline_processings_tests.o
-	$(CC) $(LDFLAGS) -o $@ $^
+	$(CC) -o $@ $^ $(LDFLAGS)
 
 $(BIN)/timeline_tests: $(OBJ_FILES) $(OBJ)/timeline_tests.o
-	$(CC) $(LDFLAGS) -o $@ $^
+	$(CC) -o $@ $^ $(LDFLAGS)
 
 $(BIN)/wave_propagation_event_tests: $(OBJ_FILES) $(OBJ)/wave_propagation_event_tests.o
-	$(CC) $(LDFLAGS) -o $@ $^
+	$(CC) -o $@ $^ $(LDFLAGS)
 
 $(BIN)/earthquake_event_spike: $(OBJ_FILES) $(OBJ)/earthquake_event_spike.o
-	$(CC) $(LDFLAGS) -o $@ $^
+	$(CC) -o $@ $^ $(LDFLAGS)
 
 $(BIN)/earthquake_events_text_storage_tests: $(OBJ_FILES) $(OBJ)/earthquake_events_text_storage_tests.o
-	$(CC) $(LDFLAGS) -o $@ $^
+	$(CC) -o $@ $^ $(LDFLAGS)
 
 $(BIN)/earthquake_event_tests: $(OBJ_FILES) $(OBJ)/earthquake_event_tests.o
-	$(CC) $(LDFLAGS) -o $@ $^
+	$(CC) -o $@ $^ $(LDFLAGS)
 
 $(BIN)/event_tests: $(OBJ_FILES) $(OBJ)/event_tests.o
-	$(CC) $(LDFLAGS) -o $@ $^
+	$(CC) -o $@ $^ $(LDFLAGS)
 
 $(BIN)/file_tests: $(OBJ_FILES) $(OBJ)/file_tests.o
-	$(CC) $(LDFLAGS) -o $@ $^
+	$(CC) -o $@ $^ $(LDFLAGS)
 
 $(BIN)/angle_tests: $(OBJ_FILES) $(OBJ)/angle_tests.o
-	$(CC) $(LDFLAGS) -o $@ $^
+	$(CC) -o $@ $^ $(LDFLAGS)
 
 #################################
 #
