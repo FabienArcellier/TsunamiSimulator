@@ -1,7 +1,7 @@
 TsunamiSimulator
 ================
 
-Student project that simulate tsunami propagation.
+Student project that simulate tsunami spread.
 
 ## Requirement
 
@@ -11,11 +11,21 @@ Student project that simulate tsunami propagation.
 
 This application simulate from a simu file (build manually) a tsunami.
 
-(http://blog.fabien-tools.net/wp-content/uploads/2013/04/calculate_simu.png)
-(http://blog.fabien-tools.net/wp-content/uploads/2013/04/simu_exec1.png)
-(http://blog.fabien-tools.net/wp-content/uploads/2013/04/simu_exec2.png)
+![simulation calculation](http://blog.fabien-tools.net/wp-content/uploads/2013/04/calculate_simu.png)
+
+You load a simu file. After the engine has calculate the simulation, you can play it.
+
+![simulation execution](http://blog.fabien-tools.net/wp-content/uploads/2013/04/simu_exec1.png)
+
+![simulation execution](http://blog.fabien-tools.net/wp-content/uploads/2013/04/simu_exec2.png)
+
 
 ## Limitation
 
 The simulation engine use a wrong physical model. 
-It do not follow classic equation of tsunami simulation as Navier-Stokes.
+It do not follow classic equation of tsunami like Navier-Stokes.
+
+## Authors
+
+* Fabien Arcellier : http://blog.fabien-tools.net
+* Cyril Henriot
